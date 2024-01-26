@@ -37,8 +37,12 @@ const Nav = () => {
         </Link>
       </li>
       <li>
-        <CreatePuzzle />
-      </li>
+              <Link href="/play/puzzles_large" className="flex items-center gap-2">
+                <FileIcon />
+                  Full Crosswords
+              </Link>
+            </li>
+      
 
       {/* <hr className="border-dashed" /> */}
       {/* 

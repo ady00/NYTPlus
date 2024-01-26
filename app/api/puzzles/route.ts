@@ -20,7 +20,7 @@ export async function POST(request: Request): Promise<Response> {
 
     const circles = circlesToBoolean(res?.circles)
     const { data, error } = await supabase
-      .from('puzzles')
+      .from('puzzles' || 'puzzles_large')
       .insert([
         {
           name: res.title,

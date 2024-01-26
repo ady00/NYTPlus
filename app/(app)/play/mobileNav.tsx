@@ -47,7 +47,10 @@ const MobileNav = () => {
               </Link>
             </li>
             <li>
-              <CreatePuzzle />
+              <Link href="/play/puzzles_large" className="flex items-center gap-2">
+                <FileIcon />
+                  Full Crosswords
+              </Link>
             </li>
 
             <hr className="border-dashed" />

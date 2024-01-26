@@ -56,6 +56,7 @@ const Congrats: React.FC<Props> = ({ isOpen, status }) => {
         onPointerDownOutside={handleDismiss}
       >
 
+
         <Dialog.Title className="flex items-center">
 
           { 

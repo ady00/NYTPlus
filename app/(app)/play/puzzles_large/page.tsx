@@ -24,13 +24,14 @@ const Page = async () => {
   const { data } = await supabase
     .from('puzzles')
     .select('*')
-    .is('year', null);
+    .not('year', 'is', null);
+
 
   if (!data) return null
 
   return (
     <div className="flex flex-col h-full py-5">
-      <Heading className="flex px-5">Puzzles</Heading>
+      <Heading className="flex px-5">Large NYT Puzzles</Heading>
       <Puzzles puzzles={data} />
     </div>
   )
