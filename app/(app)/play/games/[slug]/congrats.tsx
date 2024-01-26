@@ -15,7 +15,13 @@ const Congrats: React.FC<Props> = ({ isOpen, status }) => {
   const [open, setOpen] = useState(isOpen)
 
   useEffect(() => {
+    
+    if (status === 'ongoing') {
+      window.location.reload();
+    }
+    
     if (isOpen) {
+      
       setOpen(true)
     }
   }, [isOpen])
@@ -28,6 +34,7 @@ const Congrats: React.FC<Props> = ({ isOpen, status }) => {
   }
 
   return (
+
     <Dialog.Root
       open={open}
       onOpenChange={(newOpen) => {
@@ -35,9 +42,11 @@ const Congrats: React.FC<Props> = ({ isOpen, status }) => {
           if (status !== 'ongoing') {
             setOpen(false)
           }
+          
         }
       }}
     >
+      
       <Dialog.Content
         style={{
           maxWidth: 450,
@@ -46,8 +55,11 @@ const Congrats: React.FC<Props> = ({ isOpen, status }) => {
         onInteractOutside={handleDismiss}
         onPointerDownOutside={handleDismiss}
       >
+
         <Dialog.Title className="flex items-center">
-          {status === 'ongoing' ? (
+
+          { 
+          status === 'ongoing' ? (
             'Verifying...'
           ) : (
             <>
