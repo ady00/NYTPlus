@@ -33,7 +33,7 @@ const Main = () => {
   const appendix = redirectTo ? `?redirectTo=${redirectTo}` : ''
 
   const signInWithProvider = async (provider: Provider) => {
-    const redirectUrl = `${getURL()}auth/callback${appendix}`
+    const redirectUrl = `https://nyt-plus.vercel.app/auth/callback${appendix}`
 
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider,
