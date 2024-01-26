@@ -10,9 +10,14 @@ const Page = async () => {
   const cookieStore = cookies()
   const supabase = createClient<Database>(cookieStore)
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
   const { data, error } = await supabase
     .from('games')
     .select('*, puzzle_id(name), game_user(user_id), status_of_game(status)')
+    .eq ('created_by', user?.id)
 
   if (!data || error) return null
 

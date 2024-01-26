@@ -24,7 +24,6 @@ const Page = async () => {
   const { data } = await supabase
     .from('puzzles')
     .select('*')
-    .eq('created_by', '839bbc36-c9a3-42b8-a0a4-0c86943cbce5' )
 
   if (!data) return null
 

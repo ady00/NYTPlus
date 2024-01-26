@@ -15,7 +15,7 @@ const defaultUrl =
 export const metadata = {
   metadataBase: new URL(defaultUrl),
   title: 'NYTPlus',
-  description: 'Solve crosswords together',
+  description: 'NYT Crosswords made better.',
 }
 
 const inter = Inter({

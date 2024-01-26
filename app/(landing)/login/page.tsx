@@ -64,15 +64,14 @@ export const generateMetadata = async ({
       openGraph: {
         images: `${url}api/og?game=${game.id}`,
         title: `${game?.puzzles?.name} — NYTPlus`,
-        description: 'Solve crosswords together',
-        url: 'https://crossy.me',
+        description: 'NYT Crosswords made better.',
+        url: 'https://nyt-plus.vercel.app',
         siteName: 'NYTPlus',
       },
       twitter: {
         card: 'summary_large_image',
         title: `${game?.puzzles?.name} — NYTPlus`,
-        description: 'Solve crosswords together',
-        creator: '@eamonma',
+        description: 'NYT Crosswords made better.',
         images: [`${url}api/og?game=${game.id}`],
       },
     }

@@ -55,8 +55,7 @@ export const generateMetadata = async ({
       twitter: {
         card: 'summary_large_image',
         title: `${game?.puzzles?.name} — NYTPlus`,
-        description: 'Solve crosswords together!',
-        creator: '@eamonma',
+        description: 'NYT Crosswords made better!',
         images: [`${url}api/og?game=${game.id}`],
       },
     }
