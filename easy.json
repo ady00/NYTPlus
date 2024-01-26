@@ -1,0 +1,61 @@
+{
+  "title": "New York Times, Friday, February 4, 2022",
+  "author": "Joseph Greenbaum",
+  "editor": "Will Shortz",
+  "copyright": "2022, The New York Times",
+  "publisher": "The New York Times",
+  "date": "2/4/2022",
+  "notepad": null,
+  "jnotes": null,
+  "shadecircles": null,
+  "interpretcolors": null,
+  "key": null,
+  "hold": null,
+  "track": null,
+  "autowrap": null,
+  "mini": null,
+  "id": null,
+  "id2": null,
+  "code": null,
+  "dow": "Friday",
+  "type": null,
+  "target": "/Crossword?date=2/4/2022",
+  "valid": true,
+  "uniclue": false,
+  "admin": false,
+  "hastitle": false,
+  "navigate": true,
+  "auto": false,
+  "size": { "rows": 5, "cols": 5 },
+  "grid": [".", "M", "Y", "T", "H", ".", "I", "O", "W", "A", "B", "L", "U", "E", "S", "M", "A", "T", "E", ".", "I", "N", "H", "D", "."],
+  "gridnums": [0, 1, 2, 3, 4, 0, 5, 0, 0, 0, 6, 0, 0, 0, 0, 0, 7, 0, 0, 0, 8, 0, 0, 0, 0],
+  "circles": null,
+  "acrossmap": null,
+  "downmap": null,
+  "rbars": null,
+  "bbars": null,
+  "clues": {
+    "across": [
+      "The \"fact\" that Albert Einstein flunked math class, e.g.", 
+      "Italian city that's home to da Vinci's \"The Last Supper\"", 
+      "Childhood", 
+      "Fabric for a wool jacket", 
+      "\"___ it ever occurred to you ...\""
+    ],
+    "down": [
+      "Where River City is, in \"The Music Man\"",
+       "The \"B\" of R&B", 
+       "Obesity measure: Abbr.", 
+       "End to a chess game", 
+       "Crisply shown, as a TV broadcast"
+    ]
+  },
+  "answers": {
+    "across": [
+      "MYTH", "IOWA", "BLUES", "MATE", "INHD"
+    ],
+    "down": [
+      "BMI", "MILAN", "YOUTH", "TWEED", "HAS"
+    ]
+  }
+}
