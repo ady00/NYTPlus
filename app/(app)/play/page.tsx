@@ -14,6 +14,8 @@ const Page = async () => {
     data: { user },
   } = await supabase.auth.getUser()
 
+  if (!user) return null
+
   const { data, error } = await supabase
     .from('games')
     .select('*, puzzle_id(name), game_user(user_id), status_of_game(status)')
