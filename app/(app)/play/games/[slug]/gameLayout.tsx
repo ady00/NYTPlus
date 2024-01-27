@@ -99,6 +99,15 @@ const GameLayout: React.FC<Props> = ({ game, crosswordData, user }) => {
     return clueNumToCell
   }, [crosswordData])
 
+  const clueTextStyles = {
+    fontSize: '1.2rem', // default font size
+  };
+  
+  // Adjust font size for small screens
+  if (window.innerWidth <= 640) {
+    clueTextStyles.fontSize = '0.8rem'; // or any other size you prefer
+  }
+
   const clueNumToHighlights = useMemo(() => {
     const res: {
       across: Record<number, Record<number, string>>
@@ -167,11 +176,11 @@ const GameLayout: React.FC<Props> = ({ game, crosswordData, user }) => {
 
   return (
     <div className="flex flex-col w-full h-full min-w-fit">
-      <div className="relative flex flex-col items-center justify-between w-full h-20 text-lg font-medium text-center">
+      <div className="relative flex flex-col items-center justify-between w-full h-24 text-lg font-medium text-center">
         <Toolbar
           alwaysVisibleTools={<OnlineUsers userIds={onlineUserIds} />}
           tools={
-            <div className="flex items-center gap-2">
+            <div className="text-sm flex items-center gap-2">
               <Check {...commonProps} />
               <ShareLink game={game} />
               {/* <Button onClick={claimComplete}>Force claim</Button> */}
@@ -179,7 +188,7 @@ const GameLayout: React.FC<Props> = ({ game, crosswordData, user }) => {
           }
           timer={
             <div className="flex items-center gap-2">
-              <time className="text-left text-gray-900 min-w-[7ch] whitespace-nowrap">
+              <time className="text-sm text-left text-gray-900 min-w-[7ch] whitespace-nowrap">
                 <Timer
                   since={new Date(game.created_at).getTime()}
                   statusOfGame={statusOfGame}
@@ -198,14 +207,16 @@ const GameLayout: React.FC<Props> = ({ game, crosswordData, user }) => {
                 <Text>{clueNum}</Text>
                 {currentDirection === 'across' ? 'A' : 'D'}
               </div>
-              <Text className="relative flex-1 pr-4 text-left text-sm">
+
+              <div className="relative flex-1 pr-4 text-left" style={clueTextStyles}>
                 {parse(clueNumToClue(clueNum, currentDirection) ?? '')}
-              </Text>
+              </div>
+
             </div>
           }
         />
       </div>
-      <div className="max-h-[calc(100%-5rem)] flex-1 grid grid-cols-1 md:grid-cols-[4fr,3fr] items-center justify-center gap-4">
+      <div className="max-h-[calc(100%-7rem)] flex-1 grid grid-cols-1 md:grid-cols-[4fr,3fr] items-center justify-center gap-4">
         <div className="relative flex flex-col justify-end flex-1 h-full sm:justify-center">
           <div className="flex flex-col justify-start w-full">
             <div className="w-full px-1 sm:py-2 sm:max-h-[62svh] max-h-[68svh] md:max-h-[75svh] lg:max-h-[70svh]">
