@@ -198,7 +198,7 @@ const GameLayout: React.FC<Props> = ({ game, crosswordData, user }) => {
                 <Text>{clueNum}</Text>
                 {currentDirection === 'across' ? 'A' : 'D'}
               </div>
-              <Text className="relative flex-1 pr-4 text-left">
+              <Text className="relative flex-1 pr-4 text-left text-sm">
                 {parse(clueNumToClue(clueNum, currentDirection) ?? '')}
               </Text>
             </div>

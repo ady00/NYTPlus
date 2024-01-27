@@ -117,9 +117,9 @@ const Clues: React.FC<Props> = ({
                 if (listRef.current) listRef.current[clueNum] = ref
               }}
             >
-              <Text className={`sm:text-sm py-1 pr-2 text-right ${bg}`}>{clueNum}</Text>
+              <div className={`sm:text-sm py-1 pr-2 text-right ${bg}`}>{clueNum}</div>
               <Text
-                className={`py-1 pl-4 ${currentDirection === direction && bg} ${
+                className={`py-1 ${currentDirection === direction && bg} ${
                   clueIsFilled && 'text-[var(--gray-11)] line-through'
                 }`}
               >
