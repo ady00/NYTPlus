@@ -106,7 +106,7 @@ const Clues: React.FC<Props> = ({
           return (
             <li
               key={clueNum}
-              className="grid grid-cols-[5ch,1fr] cursor-pointer bg-opacity-30"
+              className="sm:text-sm sm:font-sm grid grid-cols-[5ch,1fr] cursor-pointer bg-opacity-30"
               onClick={() => {
                 setCurrentDirection(direction)
                 setClueNum(clueNum)
@@ -117,7 +117,7 @@ const Clues: React.FC<Props> = ({
                 if (listRef.current) listRef.current[clueNum] = ref
               }}
             >
-              <Text className={`py-1 pr-2 text-right ${bg}`}>{clueNum}</Text>
+              <Text className={`sm:text-sm py-1 pr-2 text-right ${bg}`}>{clueNum}</Text>
               <Text
                 className={`py-1 pl-4 ${currentDirection === direction && bg} ${
                   clueIsFilled && 'text-[var(--gray-11)] line-through'

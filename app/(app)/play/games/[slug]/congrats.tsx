@@ -17,7 +17,9 @@ const Congrats: React.FC<Props> = ({ isOpen, status }) => {
   useEffect(() => {
     
     if (status === 'ongoing') {
-      window.location.reload();
+      setTimeout(function() {
+        window.location.reload();
+      }, 500); // 500 milliseconds = 0.5 seconds
     }
     
     if (isOpen) {

@@ -208,7 +208,7 @@ const GameLayout: React.FC<Props> = ({ game, crosswordData, user }) => {
       <div className="max-h-[calc(100%-5rem)] flex-1 grid grid-cols-1 md:grid-cols-[4fr,3fr] items-center justify-center gap-4">
         <div className="relative flex flex-col justify-end flex-1 h-full sm:justify-center">
           <div className="flex flex-col justify-start w-full">
-            <div className="w-full px-1 sm:px-3 sm:pl-8 max-h-[68svh] md:max-h-[75svh] lg:max-h-[70svh]">
+            <div className="w-full px-1 sm:py-2 sm:max-h-[62svh] max-h-[68svh] md:max-h-[75svh] lg:max-h-[70svh]">
               <Gameboard
                 {...commonProps}
                 updateGridItem={updateGridItem}
@@ -226,7 +226,7 @@ const GameLayout: React.FC<Props> = ({ game, crosswordData, user }) => {
 
         <div className="flex-col justify-center hidden h-full overflow-hidden collapse sm:visible md:flex rounded-4">
           <div className="relative grid justify-between flex-1 w-full h-full grid-cols-1 grid-rows-2 gap-0 text-lg border-l border-dashed">
-            <div className="relative flex flex-col w-full border-b border-dashed">
+            <div className="relative flex flex-col w-full border-b border-dashed h-full">
               <Clues
                 {...commonProps}
                 shouldScrollSmoothly={shouldScrollSmoothly}
@@ -234,7 +234,7 @@ const GameLayout: React.FC<Props> = ({ game, crosswordData, user }) => {
               />
             </div>
 
-            <div className="relative flex flex-col w-full">
+            <div className="relative flex flex-col w-full h-full">
               <Clues
                 {...commonProps}
                 shouldScrollSmoothly={shouldScrollSmoothly}

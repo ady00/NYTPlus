@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import { DiscordLogoIcon, GlobeIcon } from '@radix-ui/react-icons'
+import { DiscordLogoIcon, GlobeIcon, EnvelopeClosedIcon } from '@radix-ui/react-icons'
 import { Button, Link as RadixLink, Text } from '@radix-ui/themes'
 import { type Provider } from '@supabase/supabase-js'
 import Link from 'next/link'
@@ -61,7 +61,7 @@ const Main = () => {
       name: 'Google',
       icon: GlobeIcon,
       provider: 'google',
-    }
+    },
   ]
 
   return (
