@@ -37,7 +37,37 @@ const Page = async () => {
     .select('*')
     .eq('puzzle_id', puzzleId);
 
-  if (!gamesData) return null
+    if (!gamesData) return null
+
+  const mostRecentGame = gamesData[0];
+  const gameId = mostRecentGame.id;
+
+
+
+  const { data: status_of_gameData } = await supabase
+    .from('status_of_game')
+    .select('*')
+    .eq('id', gameId)
+    .eq('status', 'completed')
+
+    const { data: usersData } = await supabase
+      .from('users')
+      .select('*')
+
+  
+  if (!status_of_gameData) return null
+
+  const gameIDlist = status_of_gameData.map(item => item.id);
+
+
+  
+  
+
+
+
+
+  
+
 
   
 
@@ -54,6 +84,12 @@ const Page = async () => {
       <ul>
         {gamesData.map((game) => (
           <li key={game.id}>{game.created_by}</li>
+        ))}
+      </ul>
+      <ul>
+        <br></br>
+        {gameIDlist.map((game) => (
+          <li key={game}>{game}</li>
         ))}
       </ul>
       

@@ -7,10 +7,7 @@ import Providers from './providers'
 import './globals.css'
 import './theme-config.css'
 
-const defaultUrl =
-  process.env.VERCEL_URL != null
-    ? `https://${process.env.VERCEL_URL}`
-    : 'http://localhost:3000'
+const defaultUrl = "https://nyt-plus.vercel.app"
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
