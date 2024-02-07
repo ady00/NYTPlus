@@ -52,6 +52,12 @@ const MobileNav = () => {
                   Full Crosswords
               </Link>
             </li>
+            <li>
+              <Link href="/play/leaderboard" className="flex items-center gap-2">
+                <FileIcon />
+                  Leaderboard
+              </Link>
+            </li>
 
             <hr className="border-dashed" />
             

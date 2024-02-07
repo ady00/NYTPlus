@@ -131,47 +131,29 @@ const Page = async () => {
 
 
 
-    // Construct an object to store gameStats information indexed by gameId
    const gameStatsMap: { [key: string]: any } = {};
 
 
-// Populate gameStatsMap with gameStats information
 gamesData.forEach((game) => {
  const matchedThing = status_of_gameData.find(thing => thing.id === game.id);
  if (matchedThing) {
-   // Parse the dates
-   const createdDate = new Date(game.created_at);
+
+  const createdDate = new Date(game.created_at);
    const endedDate = matchedThing.game_ended_at ? new Date(matchedThing.game_ended_at) : null;
 
 
    if (endedDate) {
-     // Calculate the difference in milliseconds
-     const differenceInSeconds = Math.floor((endedDate.getTime() - createdDate.getTime()) / 1000);
+     const differenceInSeconds = Math.floor((endedDate.getTime() - createdDate.getTime()) / 1000)
 
-
-     // Convert seconds to minutes and seconds
      const minutes = Math.floor(differenceInSeconds / 60);
      const seconds = differenceInSeconds % 60;
 
-
-     // Construct the formatted string for time
      const formattedTime = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
-
-     // Find the user object corresponding to the creator
      const user = usersData.find(user => user.id === game.created_by);
-
-
-     // Extract user email if user is found
      const userEmail = user ? user.email : 'Unknown';
-
-
      const userName = user ? user.raw_user_meta_data : 'Unknown';
 
-
-
-
-     // Check if the gameId already exists in gameStatsMap
      if (!gameStatsMap[game.id] || gameStatsMap[game.id].formattedTime.length < formattedTime.length) {
        gameStatsMap[game.id] = {
          gameId: game.id,
@@ -185,18 +167,84 @@ gamesData.forEach((game) => {
 });
 
 
-// Convert gameStatsMap object into an array of gameStats values
 
 
 const gameStats = Object.values(gameStatsMap);
 
+gameStats.sort((a, b) => {
+  const [minutesA, secondsA] = a.formattedTime.split(':').map(Number);
+  const [minutesB, secondsB] = b.formattedTime.split(':').map(Number);
 
-// Convert gameStats array into a set to remove duplicate gameIds
-const uniqueGameStatsSet = new Set(gameStats.map(game => game.gameId));
+  if (minutesA !== minutesB) {
+    return minutesA - minutesB;
+  }
+
+  return secondsA - secondsB;
+});
 
 
-// Filter gameStats array to include only unique gameStats objects
-const uniqueGameStats = gameStats.filter(game => uniqueGameStatsSet.has(game.gameId));
+interface GameStat {
+  gameId: string;
+  userEmail: string;
+  userName: { name: string }; // kinda weird
+  formattedTime: string;
+}
+
+const userStatsMap: { [userName: string]: GameStat } = {};
+
+function getSuffix(number: number) {
+  const suffixes = ["th", "st", "nd", "rd"];
+  const remainder10 = number % 10;
+  const remainder100 = number % 100;
+  return suffixes[remainder10] || suffixes[remainder100] || suffixes[0];
+}
+
+
+
+gameStats.forEach(gameStat => {
+  const { userName, formattedTime } = gameStat;
+
+  const userKey = userName.name;
+  
+  if (userKey in userStatsMap) {
+    const existingGameStat = userStatsMap[userKey];
+    
+    const [existingMinutes, existingSeconds] = existingGameStat.formattedTime.split(':').map(Number);
+    const [newMinutes, newSeconds] = formattedTime.split(':').map(Number);
+    
+    if (newMinutes > existingMinutes || (newMinutes === existingMinutes && newSeconds > existingSeconds)) {
+      userStatsMap[userKey] = gameStat;
+    }
+  } else {
+    userStatsMap[userKey] = gameStat;
+  }
+});
+
+const uniqueGameStats = Object.values(userStatsMap);
+
+
+const filteredGameStats = uniqueGameStats.filter(gameStat => {
+  const [minutes, seconds] = gameStat.formattedTime.split(':').map(Number);
+  const totalTimeInSeconds = minutes * 60 + seconds;
+  return totalTimeInSeconds >= 18;
+});
+
+filteredGameStats.sort((a, b) => {
+  const [minutesA, secondsA] = a.formattedTime.split(':').map(Number);
+  const [minutesB, secondsB] = b.formattedTime.split(':').map(Number);
+
+  const totalTimeInSecondsA = minutesA * 60 + secondsA;
+  const totalTimeInSecondsB = minutesB * 60 + secondsB;
+
+  // compare  times
+  return totalTimeInSecondsA - totalTimeInSecondsB;
+});
+
+
+
+
+
+
    
   
 
@@ -207,17 +255,19 @@ const uniqueGameStats = gameStats.filter(game => uniqueGameStatsSet.has(game.gam
    <div className="flex flex-col h-full py-5">
      <Heading className="flex px-5">Daily Leaderboard for {mostRecentPuzzle.name}</Heading>
     
-    
-    
 
 
- <ol>
-   {uniqueGameStats.map((game) => (
-     <li key={game?.gameId}>
-       {game?.userName.name}: ({game?.formattedTime}) minutes
-     </li>
-   ))}
- </ol>
+     <ol className="px-2 py-2 my-2" style={{ fontSize: '1.1em' }}>
+      {filteredGameStats.map((game, index) => (
+        <li key={game?.gameId} style={{ fontSize: '1.2em' }}>
+          {index === 0 && '🥇'}
+          {index === 1 && '🥈'}
+          {index === 2 && '🥉'}
+          <i>{index > 2 && `${index + 1}${getSuffix(index + 1)}. `}</i>
+          {game?.userName.name}: {game?.formattedTime} minutes
+        </li>
+      ))}
+    </ol>
    </div>
  )
 }
