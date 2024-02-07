@@ -264,7 +264,7 @@ filteredGameStats.sort((a, b) => {
           {index === 1 && '🥈'}
           {index === 2 && '🥉'}
           <i>{index > 2 && `${index + 1}${getSuffix(index + 1)}. `}</i>
-          {game?.userName.name}: {game?.formattedTime} minutes
+          <b>{game?.userName.name}</b> — {game?.formattedTime} minutes
         </li>
       ))}
     </ol>
