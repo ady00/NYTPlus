@@ -84,11 +84,6 @@ const Page = async () => {
    if (!gamesData) return null
 
 
- const mostRecentGame = gamesData[0];
- const gameId = mostRecentGame.id;
-
-
-
 
 
 
@@ -244,6 +239,8 @@ filteredGameStats.sort((a, b) => {
   // compare  times
   return totalTimeInSecondsA - totalTimeInSecondsB;
 });
+
+if (!filteredGameStats) return null
 
 
 
