@@ -159,7 +159,10 @@ gamesData.forEach((game) => {
          gameId: game.id,
          userEmail: userEmail,
          userName: userName,
-         formattedTime: formattedTime
+         formattedTime: formattedTime,
+         minutes: minutes,
+         seconds: seconds
+
        };
      }
    }
@@ -188,6 +191,8 @@ interface GameStat {
   userEmail: string;
   userName: { name: string }; // kinda weird
   formattedTime: string;
+  minutes: string;
+  seconds: string
 }
 
 const userStatsMap: { [userName: string]: GameStat } = {};
@@ -264,7 +269,7 @@ filteredGameStats.sort((a, b) => {
           {index === 1 && '🥈'}
           {index === 2 && '🥉'}
           <i>{index > 2 && `${index + 1}${getSuffix(index + 1)}. `}</i>
-          <b>{game?.userName.name}</b> — {game?.formattedTime} minutes
+          <b>{game?.userName.name}</b> — {game?.minutes}m, {game?.seconds}s
         </li>
       ))}
     </ol>
