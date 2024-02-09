@@ -109,23 +109,7 @@ const Page = async () => {
 
    if (!usersData) return null
 
-
-
-
-   // THING
-   // BLOCK
-   // STOP
-   // DONT LOOK
-
-
-
-
-
-
-
-
-
-
+   
    const gameStatsMap: { [key: string]: any } = {};
 
 
