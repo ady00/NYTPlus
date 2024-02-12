@@ -46,12 +46,7 @@ const MobileNav = () => {
                   Minis Cache
               </Link>
             </li>
-            <li>
-              <Link href="/play/puzzles_large" className="flex items-center gap-2">
-                <FileIcon />
-                  Full Crosswords
-              </Link>
-            </li>
+            
             <li>
               <Link href="/play/leaderboard" className="flex items-center gap-2">
                 <FileIcon />
