@@ -99,17 +99,14 @@ const Page = async () => {
 
 
 
-
  const { data: usersData } = await supabase
    .from('user_real')
    .select('*')
 
 
-
-
    if (!usersData) return null
 
-   
+
    const gameStatsMap: { [key: string]: any } = {};
 
 

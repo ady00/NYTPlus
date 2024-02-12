@@ -24,7 +24,7 @@ const Greeting: React.FC<Props> = ({ name }) => {
   return (
     <>
       {greeting}
-      {greeting && name ? `, ${name}` : ''}
+      {greeting && name ? `, ${name}` : '!'}
     </>
   )
 }

@@ -65,7 +65,7 @@ export const generateMetadata = async ({
         images: `${url}api/og?game=${game.id}`,
         title: `${game?.puzzles?.name} — NYTPlus`,
         description: 'NYT Crosswords made better.',
-        url: 'https://nyt-plus.vercel.app',
+        url: 'https://www.nyt.plus',
         siteName: 'NYTPlus',
       },
       twitter: {
