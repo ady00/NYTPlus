@@ -7,7 +7,6 @@ import parse from 'html-react-parser'
 import { type Database } from '@/lib/database.types'
 import useAutofocus from '@/lib/useAutofocus'
 
-import useOrientationLock from './OrientationLock';
 
 
 import Check from './check'
@@ -177,7 +176,6 @@ const GameLayout: React.FC<Props> = ({ game, crosswordData, user }) => {
     }
   }, [clueNumToHighlights, clueNum, currentDirection, setHighlights])
 
-  useOrientationLock();
 
 
   return (

@@ -12,7 +12,6 @@ import {
 import { type CrosswordData } from './gameboard'
 import GameLayout from './gameLayout'
 
-import useOrientationLock from './OrientationLock';
 
 
 export const generateMetadata = async ({
