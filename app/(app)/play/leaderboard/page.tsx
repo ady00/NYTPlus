@@ -177,8 +177,13 @@ function getSuffix(number: number) {
   const suffixes = ["th", "st", "nd", "rd"];
   const remainder10 = number % 10;
   const remainder100 = number % 100;
-  return suffixes[remainder10] || suffixes[remainder100] || suffixes[0];
+  if (remainder100 === 11 || remainder100 === 12 || remainder100 === 13) {
+    return suffixes[0];
+  } else {
+    return suffixes[remainder10] || suffixes[0];
+  }
 }
+
 
 
 
