@@ -7,7 +7,7 @@ import Providers from './providers'
 import './globals.css'
 import './theme-config.css'
 
-const defaultUrl = "https://www.nyt.plus"
+const defaultUrl = "https://nyt.plus"
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),

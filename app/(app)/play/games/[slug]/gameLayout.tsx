@@ -7,6 +7,9 @@ import parse from 'html-react-parser'
 import { type Database } from '@/lib/database.types'
 import useAutofocus from '@/lib/useAutofocus'
 
+import useOrientationLock from './OrientationLock';
+
+
 import Check from './check'
 import Clues from './clues'
 import Confetti from './confetti'
@@ -173,6 +176,9 @@ const GameLayout: React.FC<Props> = ({ game, crosswordData, user }) => {
       })
     }
   }, [clueNumToHighlights, clueNum, currentDirection, setHighlights])
+
+  useOrientationLock();
+
 
   return (
     <div className="flex flex-col w-full h-full min-w-fit">
