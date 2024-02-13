@@ -2,6 +2,7 @@ import React from 'react'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
+
 import { type Database } from '@/lib/database.types'
 import {
   createClient,
@@ -10,6 +11,9 @@ import {
 
 import { type CrosswordData } from './gameboard'
 import GameLayout from './gameLayout'
+
+import useOrientationLock from './OrientationLock';
+
 
 export const generateMetadata = async ({
   params,
