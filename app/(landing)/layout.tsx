@@ -7,11 +7,15 @@ import { createClient } from '@/utils/supabase/server'
 
 import Greeting from '../greeting'
 
+
+
 import MainThemeSwitcher from './mainThemeSwitcher'
 
 type Props = {
   children: React.ReactNode
 }
+
+
 
 const Layout: React.FC<Props> = async ({ children }) => {
   const cookieStore = cookies()
@@ -20,6 +24,16 @@ const Layout: React.FC<Props> = async ({ children }) => {
   const {
     data: { user },
   } = await client.auth.getUser()
+
+
+  const { data: userReal } = await client
+   .from('user_real')
+   .select('*')
+   .eq('id', user?.id)
+   .single()
+
+
+  
 
   // get profile
   let profile
@@ -47,10 +61,10 @@ const Layout: React.FC<Props> = async ({ children }) => {
               </h1>
             </Link>
 
-            <div className="flex items-center gap-4 font-medium">
+            <div className="flex items-center gap-4 font-small">
               {user && (
                 <>
-                  <Greeting name={profile?.full_name ?? user.email} />
+                  <i><Greeting name={userReal.raw_user_meta_data.name.split(' ')[0]} /></i>
                 </>
               )}
 

@@ -36,16 +36,21 @@ const UserCard = ({ session }: { session: Session }) => {
     router.push('/login')
   }
 
+  
+
+
   const [profile, setProfile] =
     useState<Database['public']['Tables']['profiles']['Row']>()
 
   const getProfile = useCallback(async () => {
+
     const { data, error } = await supabase
-      .from('profiles')
-      .select('id, full_name, avatar_url')
+      .from('user_real')
+      .select('*')
       .eq('id', user?.id)
       .single()
-    if (error) {
+    
+      if (error) {
       console.log(error)
     }
 
@@ -59,6 +64,9 @@ const UserCard = ({ session }: { session: Session }) => {
 
   const [open, setOpen] = useState(false)
 
+
+  
+
   return (
 
     <Card>
@@ -66,13 +74,13 @@ const UserCard = ({ session }: { session: Session }) => {
         <Flex gap="2" align="center" className="overflow-hidden">
           <Avatar
             size="3"
-            src={profile?.avatar_url ?? ''}
+            src={profile?.full_name?.charAt(0) ?? ''}
             radius="full"
-            fallback={profile?.full_name?.charAt(0) ?? ''}
+            fallback={profile?.raw_user_meta_data.name?.charAt(0) ?? ''}
           />
           <Box className="min-w-0">
             <Text className="min-w-0 truncate" as="div" size="2" weight="bold">
-              {profile?.full_name}
+              {profile?.raw_user_meta_data.name}
             </Text>
           </Box>
         </Flex>
@@ -86,15 +94,7 @@ const UserCard = ({ session }: { session: Session }) => {
           <DropdownMenu.Content align="end">
             <ThemeSwitcher />
 
-            <DropdownMenu.Item asChild>
-              <button
-                onClick={() => {
-                  setOpen(true)
-                }}
-              >
-                Edit profile
-              </button>
-            </DropdownMenu.Item>
+            
 
               {user?.email === 'advayb2018@gmail.com' ? (
                 <DropdownMenu.Item asChild>
