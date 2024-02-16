@@ -104,6 +104,10 @@ export interface Database {
           id: string
           updated_at: string | null
           username: string | null
+          raw_user_meta_data: {
+            name: string | null
+            picture: string | null
+          }
         }
         Insert: {
           avatar_url?: string | null

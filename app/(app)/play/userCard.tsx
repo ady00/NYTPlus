@@ -74,13 +74,13 @@ const UserCard = ({ session }: { session: Session }) => {
         <Flex gap="2" align="center" className="overflow-hidden">
           <Avatar
             size="3"
-            src={profile?.full_name?.charAt(0) ?? ''}
+            src={profile?.raw_user_meta_data?.picture ?? ''}
             radius="full"
-            fallback={profile?.raw_user_meta_data.name?.charAt(0) ?? ''}
-          />
+            fallback={profile?.raw_user_meta_data?.name?.charAt(0) ?? ''}
+            />
           <Box className="min-w-0">
             <Text className="min-w-0 truncate" as="div" size="2" weight="bold">
-              {profile?.raw_user_meta_data.name}
+              {profile?.raw_user_meta_data?.name}
             </Text>
           </Box>
         </Flex>
