@@ -9,6 +9,8 @@ import {
 } from '@/utils/supabase/server'
 
 import Form from './loginForm'
+import signupForm from './signUpForm'
+
 import Main from './main'
 
 export const generateMetadata = async ({
@@ -49,11 +51,6 @@ export const generateMetadata = async ({
     }
   }
 
-  if (gameError) {
-    return {
-      title: '404',
-    }
-  }
 
   let url = process.env.NEXT_PUBLIC_LIVE_DOMAIN ?? 'http://localhost:3000/'
   url = url.charAt(url.length - 1) === '/' ? url : `${url}/`
@@ -95,6 +92,7 @@ const Login = async ({
   }
 
   return (
+    
     <div className="flex items-center self-center justify-center w-full h-full bg-gray-50">
       <div className="flex flex-col w-full max-w-sm p-4 border border-gray-300 rounded-lg shadow-sm bg-gray-25">
         <Text asChild>
@@ -103,6 +101,8 @@ const Login = async ({
 
         <hr className="my-3" />
         <Main />
+
+
 
         {searchParams?.message && (
           <>

@@ -56,9 +56,9 @@ const AccountForm: React.FC<Props> = ({
     try {
       setLoading(true)
 
-      const { error } = await supabase.from('profiles').upsert({
+      const { data, error } = await supabase.from('profiles').upsert({
         id: user?.id as string,
-        full_name: fullname,
+        full_name: "Default User",
         updated_at: new Date().toISOString(),
       })
       if (error) throw Error(error.message)
@@ -67,7 +67,7 @@ const AccountForm: React.FC<Props> = ({
     } catch (error) {
 
 
-      alert( + 'Error updating the data!')
+      alert(error + 'Error updating the data!')
     } finally {
       setLoading(false)
     }

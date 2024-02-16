@@ -43,6 +43,7 @@ const Main = () => {
     })
 
     if (error) {
+      console.log(error.message)
       window.location.href = '/login?message=Could not authenticate user'
       return
     }
