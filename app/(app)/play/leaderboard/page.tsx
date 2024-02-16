@@ -212,7 +212,7 @@ const uniqueGameStats = Object.values(userStatsMap);
 const filteredGameStats = uniqueGameStats.filter(gameStat => {
   const [minutes, seconds] = gameStat.formattedTime.split(':').map(Number);
   const totalTimeInSeconds = minutes * 60 + seconds;
-  return totalTimeInSeconds >= 18;
+  return totalTimeInSeconds >= 10;
 });
 
 filteredGameStats.sort((a, b) => {
