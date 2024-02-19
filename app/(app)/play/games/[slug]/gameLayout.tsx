@@ -102,13 +102,10 @@ const GameLayout: React.FC<Props> = ({ game, crosswordData, user }) => {
   }, [crosswordData])
 
   const clueTextStyles = {
-    fontSize: '1.2rem', // default font size
+    fontSize: '1rem', // default font size
   };
   
-  // Adjust font size for small screens
-  if (window.innerWidth <= 640) {
-    clueTextStyles.fontSize = '0.8rem'; // or any other size you prefer
-  }
+  
 
   const clueNumToHighlights = useMemo(() => {
     const res: {

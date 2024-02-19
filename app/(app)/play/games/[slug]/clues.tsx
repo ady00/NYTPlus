@@ -52,8 +52,8 @@ const Clues: React.FC<Props> = ({
   return (
     <>
       <div className="select-none">
-        <div className="px-6 py-2 font-serif font-bold">
-          {direction.charAt(0).toUpperCase() + direction.slice(1)}
+        <div className="px-3 text-sm font-bold tracking-wide uppercase py-1.5">
+          {direction === 'across' ? <>Across</> : <>Down</>}
         </div>
         <hr className="border-dashed" />
       </div>
@@ -106,7 +106,7 @@ const Clues: React.FC<Props> = ({
           return (
             <li
               key={clueNum}
-              className="sm:text-sm sm:font-sm grid grid-cols-[5ch,1fr] cursor-pointer bg-opacity-30"
+              className="grid grid-cols-[5ch,1fr] cursor-pointer bg-opacity-30"
               onClick={() => {
                 setCurrentDirection(direction)
                 setClueNum(clueNum)
@@ -117,9 +117,9 @@ const Clues: React.FC<Props> = ({
                 if (listRef.current) listRef.current[clueNum] = ref
               }}
             >
-              <div className={`sm:text-sm py-1 pr-2 text-right ${bg}`}>{clueNum}</div>
+              <Text className={`py-1 pr-2 text-right ${bg}`}>{clueNum}</Text>
               <Text
-                className={`py-1 ${currentDirection === direction && bg} ${
+                className={`py-1 pl-4 ${currentDirection === direction && bg} ${
                   clueIsFilled && 'text-[var(--gray-11)] line-through'
                 }`}
               >
