@@ -7,6 +7,9 @@ import parse from 'html-react-parser'
 import { type Database } from '@/lib/database.types'
 import useAutofocus from '@/lib/useAutofocus'
 
+import useSSRWindowSize from './useSSRWindowSize'
+
+
 
 
 import Check from './check'
@@ -101,9 +104,15 @@ const GameLayout: React.FC<Props> = ({ game, crosswordData, user }) => {
     return clueNumToCell
   }, [crosswordData])
 
+  const { width } = useSSRWindowSize()
+
   const clueTextStyles = {
-    fontSize: '0.80rem', // default font size
+    fontSize: '1.2rem', // default font size
   };
+  
+  if (width < 640) {
+    clueTextStyles.fontSize = '0.8rem';
+   }
   
   
 
