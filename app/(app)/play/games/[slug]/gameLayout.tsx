@@ -102,7 +102,7 @@ const GameLayout: React.FC<Props> = ({ game, crosswordData, user }) => {
   }, [crosswordData])
 
   const clueTextStyles = {
-    fontSize: '1rem', // default font size
+    fontSize: '0.85rem', // default font size
   };
   
   
