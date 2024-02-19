@@ -19,7 +19,7 @@ const Congrats: React.FC<Props> = ({ isOpen, status }) => {
     if (status === 'ongoing') {
       setTimeout(function() {
         window.location.reload();
-      }, 650);
+      }, 750);
     }
     
     if (isOpen) {
