@@ -23,7 +23,7 @@ const Page = async () => {
 
  const {
    data: { user },
- } = await supabase.auth.getUser()
+  } = await supabase.auth.getUser()
 
  if (!user) return null
 
@@ -32,50 +32,6 @@ const Page = async () => {
    .select('*')
    .eq('id', user?.id)
    .single()
-
-
-
-
-
-   const { data } = await supabase
-   .from('puzzles')
-   .select('*')
-   .order('created_at', { ascending: false })
-   .limit(1);
-
-
-
-
- if (!data) return null
-
-
- const mostRecentPuzzle = data[0];
- const puzzleId = mostRecentPuzzle.id;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
