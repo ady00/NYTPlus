@@ -4,7 +4,9 @@ import {
   DotFilledIcon,
   FileIcon,
   HamburgerMenuIcon,
+  ListBulletIcon,
   HomeIcon,
+  MagnifyingGlassIcon
 } from '@radix-ui/react-icons'
 import { IconButton, Link as RadixLink, Popover } from '@radix-ui/themes'
 import NextLink from 'next/link'
@@ -43,14 +45,20 @@ const MobileNav = () => {
             <li>
               <Link href="/play/puzzles" className="flex items-center gap-2">
                 <FileIcon />
-                  Minis Cache
+                  Puzzles
               </Link>
             </li>
             
             <li>
               <Link href="/play/leaderboard" className="flex items-center gap-2">
-                <FileIcon />
+                <ListBulletIcon />
                   Leaderboard
+              </Link>
+            </li>
+            <li>
+              <Link href="/play/leaderboard" className="flex items-center gap-2">
+                <MagnifyingGlassIcon />
+                  Stats
               </Link>
             </li>
 

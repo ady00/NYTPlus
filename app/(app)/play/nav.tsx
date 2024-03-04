@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import { DotFilledIcon, FileIcon, HomeIcon, BookmarkIcon, ListBulletIcon } from '@radix-ui/react-icons'
+import { DotFilledIcon, FileIcon, HomeIcon, BookmarkIcon, ListBulletIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Link as RadixLink } from '@radix-ui/themes'
 import NextLink from 'next/link'
 
@@ -33,7 +33,7 @@ const Nav = () => {
       <li>
         <Link href="/play/puzzles" className="flex items-center gap-2">
           <FileIcon />
-          Minis Cache
+          Puzzles
         </Link>
       </li>
       
@@ -41,6 +41,13 @@ const Nav = () => {
               <Link href="/play/leaderboard" className="flex items-center gap-2">
                 <ListBulletIcon />
                   Leaderboard
+              </Link>
+            </li>
+
+            <li>
+              <Link href="/play/stats" className="flex items-center gap-2">
+                <MagnifyingGlassIcon />
+                  Stats
               </Link>
             </li>
       

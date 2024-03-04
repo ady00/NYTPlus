@@ -12,7 +12,7 @@ import { createClient } from '@/utils/supabase/server'
 
 
 export const metadata = {
- title: 'Puzzles',
+ title: 'Leaderboard',
 }
 
 
@@ -87,7 +87,7 @@ const Page = async () => {
 
 
 
- const { data: status_of_gameData } = await supabase
+ const { data: statusData } = await supabase
    .from('status_of_game')
    .select('*')
    .eq('status', 'completed')
@@ -95,7 +95,7 @@ const Page = async () => {
 
 
 
-  if (!status_of_gameData) return null
+  if (!statusData) return null
 
 
 
@@ -107,11 +107,12 @@ const Page = async () => {
    if (!usersData) return null
 
 
-   const gameStatsMap: { [key: string]: any } = {};
+
+const gameStatsMap: { [key: string]: any } = {};
 
 
 gamesData.forEach((game) => {
- const matchedThing = status_of_gameData.find(thing => thing.id === game.id);
+ const matchedThing = statusData.find(thing => thing.id === game.id);
  if (matchedThing) {
 
   const createdDate = new Date(game.created_at);
