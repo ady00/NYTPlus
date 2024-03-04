@@ -56,7 +56,7 @@ const MobileNav = () => {
               </Link>
             </li>
             <li>
-              <Link href="/play/leaderboard" className="flex items-center gap-2">
+              <Link href="/play/stats" className="flex items-center gap-2">
                 <MagnifyingGlassIcon />
                   Stats
               </Link>
