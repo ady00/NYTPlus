@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from 'react'
 import { FilePlusIcon } from '@radix-ui/react-icons'
-import { Dialog, Link } from '@radix-ui/themes'
+import { Dialog } from '@radix-ui/themes'
 import { useRouter } from 'next/navigation'
 
 import Create from './puzzles/create/create'

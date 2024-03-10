@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Heading } from '@radix-ui/themes'
+import { Heading, Tabs } from '@radix-ui/themes'
 import { cookies } from 'next/headers'
 
 
@@ -8,6 +8,15 @@ import { createClient } from '@/utils/supabase/server'
 
 
 import Chart from 'chart.js/auto';
+
+import Graph from './graph';
+
+
+import * as Accordion from '@radix-ui/react-accordion';
+import { ChevronDownIcon } from '@radix-ui/react-icons';
+import classNames from 'classnames';
+
+
 
 
 
@@ -215,40 +224,42 @@ const pastThirtyDaysStatistics = calculateStatistics(pastThirtyDaysGameStats);
 
 
 
+
+
  return (
    <div className="flex flex-col h-full py-5">
      <Heading className="flex px-5 pb-2">Stats for {userReal.raw_user_meta_data.name}</Heading>
 
-<div className = "mx-4 my-3">
-  <h3>All Time</h3>
-    <i className = "text-xl">
-      Fastest: {statistics.fastest}<br></br>Slowest: {statistics.slowest}<br></br>Average: {statistics.average}<br></br>Median: {statistics.median}
-    </i>
-    <br>
-    </br>
+     <Graph 
+  mean={{
+    monthly: pastThirtyDaysStatistics.average,
+    weekly: pastWeekStatistics.average,
+    alltime: statistics.average
+  }}
+  median={{
+    monthly: pastThirtyDaysStatistics.median,
+    weekly: pastWeekStatistics.median,
+    alltime: statistics.median
+  }}
+  fastest={{
+    monthly: pastThirtyDaysStatistics.fastest,
+    weekly: pastWeekStatistics.fastest,
+    alltime: statistics.fastest
+  }}
+  slowest={{
+    monthly: pastThirtyDaysStatistics.slowest,
+    weekly: pastWeekStatistics.slowest,
+    alltime: statistics.slowest
+  }}
+/>      
 
-    <br>
-    </br>
 
-    <h3>Past Week</h3>
-    <i className = "text-xl">
-      Fastest: {pastWeekStatistics.fastest}<br></br>Slowest: {pastWeekStatistics.slowest}<br></br>Average: {pastWeekStatistics.average}<br></br>Median: {pastWeekStatistics.median}
-    </i>
-    <br>
-    </br>
-    <br>
-    </br>
-    <h3>Past Month</h3>
-    <i className = "text-xl">
-      Fastest: {pastThirtyDaysStatistics.fastest}<br></br>Slowest: {pastThirtyDaysStatistics.slowest}<br></br>Average: {pastThirtyDaysStatistics.average}<br></br>Median: {pastThirtyDaysStatistics.median}
-    </i>
+
 </div>
     
   
 
   
-  
-   </div>
  )
 }
 
