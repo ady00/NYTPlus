@@ -130,6 +130,9 @@ const gameStats = Object.values(gameStatsMap);
 interface GameObject {
   formattedTime: string;
   date: Date
+  minutes: BigInteger
+  seconds: BigInteger
+  
 }
 
   function timeStringToSeconds(timeString: string): number {
@@ -231,6 +234,7 @@ const pastThirtyDaysStatistics = calculateStatistics(pastThirtyDaysGameStats);
      <Heading className="flex px-5 pb-2">Stats for {userReal.raw_user_meta_data.name}</Heading>
 
      <Graph 
+       gameStats={gameStats}
   mean={{
     monthly: pastThirtyDaysStatistics.average,
     weekly: pastWeekStatistics.average,
