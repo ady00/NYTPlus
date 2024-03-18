@@ -5,6 +5,8 @@ import { cookies } from 'next/headers'
 
 import { type Database } from '@/lib/database.types'
 import { createClient } from '@/utils/supabase/server'
+import { subDays, formatISO } from 'date-fns';
+
 
 
 
@@ -84,13 +86,18 @@ const Page = async () => {
    if (!gamesData) return null
 
 
+   const fiveDaysAgo = subDays(new Date(), 5);
 
+   // Format the date in ISO8601 format
+   const fiveDaysAgoISO = formatISO(fiveDaysAgo);
+   
 
 
  const { data: statusData } = await supabase
    .from('status_of_game')
    .select('*')
    .eq('status', 'completed')
+   .gt('game_ended_at', fiveDaysAgoISO);
 
 
 
@@ -110,13 +117,70 @@ const Page = async () => {
 
 const gameStatsMap: { [key: string]: any } = {};
 
+// start here
+interface Game {
+  created_at: string;
+  created_by: string;
+  grid: string[];
+  id: string;
+  password: string;
+  puzzle_id: string;
+  updated_at: string;
+}
 
-gamesData.forEach((game) => {
- const matchedThing = statusData.find(thing => thing.id === game.id);
- if (matchedThing) {
+interface StatusData {
+  game_ended_at: string | null;
+  id: string;
+  status: "ongoing" | "completed" | "abandoned";
+}
+
+async function findStatusObject(statusData: StatusData[], gameId: string): Promise<StatusData | null> {
+  if (!statusData || statusData.length === 0 || !gameId) {
+      return null;
+
+  }
+  const statusObject = statusData.find(status => status.id === gameId);
+  return statusObject || null;
+}
+
+
+
+
+
+
+
+gamesData.forEach( async (game) => {
+ const matchedStatus = statusData.find(status => status.id === game.id);
+
+ const gameIdToFind: string = game.id;
+
+    try {
+        // Call findStatusObject function
+        console.log()
+        console.log("Starting afresh:")
+
+        const statusObject = statusData.find(status => {
+            console.log("Desired: " + gameIdToFind)
+            console.log("Checking status:", status.id);
+            return status.id === gameIdToFind;
+        });
+        
+        if (statusObject) {
+            console.log("Found status object for game ID:", gameIdToFind);
+            console.log("Status object:", statusObject.id);
+            // Further processing or logic can be performed here
+        } else {
+            console.log("Status object not found for game ID:", gameIdToFind);
+        }
+    } catch (error) {
+        console.error("Error occurred while finding status object for game ID:", gameIdToFind, error);
+    }
+  
+ 
+ if (matchedStatus) {
 
   const createdDate = new Date(game.created_at);
-   const endedDate = matchedThing.game_ended_at ? new Date(matchedThing.game_ended_at) : null;
+   const endedDate = matchedStatus.game_ended_at ? new Date(matchedStatus.game_ended_at) : null;
 
 
    if (endedDate) {
