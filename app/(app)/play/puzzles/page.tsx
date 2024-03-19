@@ -7,6 +7,8 @@ import { createClient } from '@/utils/supabase/server'
 
 import Puzzles from './puzzles'
 
+
+
 export const metadata = {
   title: 'Puzzles',
 }
@@ -24,7 +26,7 @@ const Page = async () => {
   const { data } = await supabase
     .from('puzzles')
     .select('*')
-    .is('year', null);
+    .eq('created_by', user?.id)
 
   if (!data) return null
 

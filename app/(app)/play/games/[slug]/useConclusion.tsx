@@ -2,12 +2,25 @@ import { useEffect, useState } from 'react'
 
 import { type Database } from '@/lib/database.types'
 
+import { type Session } from '@supabase/supabase-js'
+
+
 const useConclusion = (
   gameId: string,
   gameStatus?: Database['public']['Tables']['status_of_game']['Row']['status'],
 ) => {
   const [isExploding, setIsExploding] = useState(false)
   const [claimedToBeComplete, setClaimedToBeComplete] = useState(false)
+
+  const user = ({ session }: { session: Session }) => {
+    const user = session?.user
+
+  }
+
+  
+
+
+
 
   useEffect(() => {
     if (gameStatus === 'completed') {
@@ -17,7 +30,7 @@ const useConclusion = (
 
     const timeout = setTimeout(() => {
       setIsExploding(false)
-    }, 5000)
+    }, 200)
 
     return () => {
       clearTimeout(timeout)

@@ -9,6 +9,9 @@ import { createClient } from '@/utils/supabase/server'
 
 import PuzzleContent from './puzzleContent'
 
+import StartGameButton from './startGame'
+
+
 export const generateMetadata = async ({
   params,
 }: {
@@ -104,9 +107,7 @@ const Page = async ({ params }: { params: { slug: string } }) => {
         <div className="flex items-center justify-center flex-1 w-full h-full">
           <PuzzleContent crosswordData={crosswordData} />
         </div>
-        <form action={createGame} className="flex justify-end w-full">
-          <Button>Start a game</Button>
-        </form>
+        <StartGameButton createGame={createGame} />
       </div>
     )
   }
