@@ -2,6 +2,9 @@ import React, { useEffect, useRef } from 'react';
 import { Heading, Tabs } from '@radix-ui/themes'
 import { cookies } from 'next/headers'
 
+import { subDays, formatISO } from 'date-fns';
+
+
 
 import { type Database } from '@/lib/database.types'
 import { createClient } from '@/utils/supabase/server'
@@ -53,6 +56,12 @@ const Page = async () => {
    if (!gamesData) return null
 
 
+   const fiveDaysAgo = subDays(new Date(), 3);
+
+   // Format the date in ISO8601 format
+   const fiveDaysAgoISO = formatISO(fiveDaysAgo);
+
+
 
 
 
@@ -60,8 +69,7 @@ const Page = async () => {
    .from('status_of_game')
    .select('*')
    .eq('status', 'completed')
-
-
+   .gt('game_ended_at', fiveDaysAgoISO);
 
 
   if (!statusData) return null

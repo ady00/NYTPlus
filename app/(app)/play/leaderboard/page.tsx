@@ -86,7 +86,7 @@ const Page = async () => {
    if (!gamesData) return null
 
 
-   const fiveDaysAgo = subDays(new Date(), 5);
+   const fiveDaysAgo = subDays(new Date(), 3);
 
    // Format the date in ISO8601 format
    const fiveDaysAgoISO = formatISO(fiveDaysAgo);
@@ -151,30 +151,6 @@ async function findStatusObject(statusData: StatusData[], gameId: string): Promi
 
 gamesData.forEach( async (game) => {
  const matchedStatus = statusData.find(status => status.id === game.id);
-
- const gameIdToFind: string = game.id;
-
-    try {
-        // Call findStatusObject function
-        console.log()
-        console.log("Starting afresh:")
-
-        const statusObject = statusData.find(status => {
-            console.log("Desired: " + gameIdToFind)
-            console.log("Checking status:", status.id);
-            return status.id === gameIdToFind;
-        });
-        
-        if (statusObject) {
-            console.log("Found status object for game ID:", gameIdToFind);
-            console.log("Status object:", statusObject.id);
-            // Further processing or logic can be performed here
-        } else {
-            console.log("Status object not found for game ID:", gameIdToFind);
-        }
-    } catch (error) {
-        console.error("Error occurred while finding status object for game ID:", gameIdToFind, error);
-    }
   
  
  if (matchedStatus) {
