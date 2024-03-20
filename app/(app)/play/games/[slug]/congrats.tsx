@@ -84,7 +84,7 @@ const Congrats: React.FC<Props> = ({ isOpen, status }) => {
         {status === 'ongoing' ? (
 
         <div className="flex items-center justify-center">
-        <HashLoader speedMultiplier = {0.75} color="#B88C67" size = "50" />
+        <HashLoader speedMultiplier = {0.89} color="#B88C67" size = "50" />
         </div>
 
         ) : (
