@@ -4,6 +4,8 @@ import { Button, Dialog, Flex } from '@radix-ui/themes'
 
 import { type Database } from '@/lib/database.types'
 
+import { HashLoader } from 'react-spinners';
+
 type Props = {
   isOpen: boolean
   status:
@@ -63,7 +65,10 @@ const Congrats: React.FC<Props> = ({ isOpen, status }) => {
 
           { 
           status === 'ongoing' ? (
-            'Verifying...'
+            <>
+            <div>Verifying...</div>
+            </>
+            
           ) : (
             <>
               <StarFilledIcon
@@ -75,17 +80,33 @@ const Congrats: React.FC<Props> = ({ isOpen, status }) => {
             </>
           )}
         </Dialog.Title>
+
+        {status === 'ongoing' ? (
+
+        <div className="flex items-center justify-center">
+        <HashLoader speedMultiplier = "0.72" color="#B88C67" size = "50" />
+        </div>
+
+        ) : (
+          <>
+          </>
+
+          )}
+
+        
         <Dialog.Description size="2" mb="4">
           {status === 'completed' && "You've completed the puzzle."}
         </Dialog.Description>
 
-        <Flex gap="3" mt="4" justify="end">
-          <Dialog.Close>
-            <Button disabled={status === 'ongoing'} variant="soft">
-              Done
-            </Button>
-          </Dialog.Close>
-        </Flex>
+        {status === 'completed' && (
+          <Flex gap="2" mt="2" justify="end">
+            <Dialog.Close>
+              <Button variant="soft">
+                Done
+              </Button>
+            </Dialog.Close>
+          </Flex>
+        )}
       </Dialog.Content>
     </Dialog.Root>
   )

@@ -4,6 +4,9 @@ import { ArrowRightIcon } from '@radix-ui/react-icons'
 import { Button } from '@radix-ui/themes'
 import Link from 'next/link'
 
+import StartGameButton from './startGame'
+
+
 type Props = {
   isLoggedIn: boolean
 }
