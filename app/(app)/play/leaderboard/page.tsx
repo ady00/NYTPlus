@@ -287,15 +287,30 @@ if (!filteredGameStats) return null
 
 
      <ol className="px-2 py-2 my-2" style={{ fontSize: '1.1em' }}>
-      {filteredGameStats.map((game, index) => (
-        <li key={game?.gameId} style={{ fontSize: '1.2em' }}>
-          {index === 0 && '🥇'}
-          {index === 1 && '🥈'}
-          {index === 2 && '🥉'}
-          <i>{index > 2 && `${index + 1}${getSuffix(index + 1)}. `}</i>
-          <b>{game?.userName.name}</b> — {game?.minutes}m, {game?.seconds}s
-        </li>
-      ))}
+     {filteredGameStats.map((game, index) => {
+    // Trim the user's name to first name and first initial of last name
+    const fullName = game?.userName.name;
+    let trimmedName = "";
+
+    if (fullName) {
+      const names = fullName.split(" ");
+      if (names.length >= 2) {
+        trimmedName = names[0] + " " + names[names.length - 1].charAt(0) + ".";
+      } else {
+        trimmedName = fullName;
+      }
+    }
+
+    return (
+      <li key={game?.gameId} style={{ fontSize: '1.2em' }}>
+        {index === 0 && '🥇'}
+        {index === 1 && '🥈'}
+        {index === 2 && '🥉'}
+        <i>{index > 2 && `${index + 1}${getSuffix(index + 1)}. `}</i>
+        <b>{trimmedName}</b> — {game?.minutes}m, {game?.seconds}s
+      </li>
+    );
+  })}
     </ol>
    </div>
  )
