@@ -50,6 +50,7 @@ export async function POST(request: Request): Promise<Response> {
     .update({ status: 'completed', game_ended_at: new Date().toISOString() })
     .eq('id', req)
     .single()
+    
 
   if (updatedGameError) {
     return Response.json({ error: updatedGameError })

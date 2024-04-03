@@ -132,6 +132,7 @@ interface StatusData {
   game_ended_at: string | null;
   id: string;
   status: "ongoing" | "completed" | "abandoned";
+  user_id: string;
 }
 
 async function findStatusObject(statusData: StatusData[], gameId: string): Promise<StatusData | null> {
@@ -268,17 +269,6 @@ filteredGameStats.sort((a, b) => {
 });
 
 if (!filteredGameStats) return null
-
-
-
-
-
-
-   
-  
-
-
-
 
  return (
    <div className="flex flex-col h-full py-5">

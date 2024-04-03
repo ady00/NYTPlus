@@ -28,6 +28,7 @@ create table "public"."status_of_game" (
     "id" uuid not null,
     "status" game_status not null default 'ongoing'::game_status,
     "game_ended_at" timestamp with time zone
+    "user_id" uuid
 );
 
 

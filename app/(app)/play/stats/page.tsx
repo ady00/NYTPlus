@@ -56,12 +56,10 @@ const Page = async () => {
    if (!gamesData) return null
 
 
-   const fiveDaysAgo = subDays(new Date(), 20);
+   const fiveDaysAgo = subDays(new Date(), 7);
 
    // Format the date in ISO8601 format
    const fiveDaysAgoISO = formatISO(fiveDaysAgo);
-
-
 
 
 
@@ -70,6 +68,8 @@ const Page = async () => {
    .select('*')
    .eq('status', 'completed')
    .gt('game_ended_at', fiveDaysAgoISO);
+
+
 
 
   if (!statusData) return null
