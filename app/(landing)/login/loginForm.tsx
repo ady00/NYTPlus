@@ -26,6 +26,32 @@ const Form = () => {
     return redirect('/play')
   }
 
+  function generateRandomCode() {
+    return Math.floor(1000 + Math.random() * 9000);
+  }
+
+  const guestRegister = async () => {
+
+    const names = ["Deckard", "Neo", "Dalton", "Landa", "Hellstrom", "Hicox", "Hayes", "Fillmore", "Zane", "Suleiman", "Phillipa", "Cobb"];
+
+    const supabase = createClient<Database>()
+
+    const email = `guest${generateRandomCode()}@guest.com`;
+    const password = `password${generateRandomCode()}`;
+    const name = "Guest User " + names[Math.floor(Math.random() * names.length)];
+
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          name: name,
+        },
+      },
+    })
+    return redirect('/play')
+  }
+
   const signUp = async (formData: FormData) => {
     const email = formData.get('signupEmail') as string
     const password = formData.get('signupPassword') as string
@@ -44,7 +70,7 @@ const Form = () => {
     })
 
     if (error) {
-      return redirect('/login?message=Could not authenticate user')
+      return redirect('/login?message=Invalid email/password used!')
     }
 
     return redirect('/play')
@@ -52,6 +78,8 @@ const Form = () => {
 
   return (
       <div className="mt-2">
+        
+          
 
 
         <details className="mt-2" >
@@ -124,12 +152,18 @@ const Form = () => {
   </div>
 </div>
 </form>
-        
-        
+             
         </details>
 
-        
+        <hr className="border-t-2 border-dashed border-gray-300 mt-6"/>
+
         </div>
+          <div className="flex flex-col w-full mt-6">
+              <Button onClick = {guestRegister}>Play as Guest</Button>
+            </div>
+            <span className="text-gray-900 text-sm"><i>Guests cannot be on daily leaderboards or view stats.</i></span>
+
+
       </div>
       
   )

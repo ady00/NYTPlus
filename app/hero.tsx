@@ -41,7 +41,7 @@ const Hero: React.FC<Props> = ({ isLoggedIn }) => {
               </Link>
             ) : (
               <Link href={link}>
-                Sign in to play <ArrowRightIcon />
+                Sign in to play, or play as guest <ArrowRightIcon />
               </Link>
             )}
           </Button>

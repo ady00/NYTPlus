@@ -56,7 +56,9 @@ const Form = () => {
             </div>
           </div>
         </form>
+        
       </details>
+      
     )
   )
 }

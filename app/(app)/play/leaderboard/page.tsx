@@ -99,11 +99,7 @@ const Page = async () => {
    .eq('status', 'completed')
    .gt('game_ended_at', fiveDaysAgoISO);
 
-
-
-
   if (!statusData) return null
-
 
 
  const { data: usersData } = await supabase
@@ -192,9 +188,14 @@ gamesData.forEach( async (game) => {
 
 const gameStats = Object.values(gameStatsMap);
 
+gameStats.filter(stats => !stats.userName.name.startsWith("Guest User"));
+
+
 gameStats.sort((a, b) => {
   const [minutesA, secondsA] = a.formattedTime.split(':').map(Number);
   const [minutesB, secondsB] = b.formattedTime.split(':').map(Number);
+
+
 
   if (minutesA !== minutesB) {
     return minutesA - minutesB;
@@ -254,7 +255,10 @@ const uniqueGameStats = Object.values(userStatsMap);
 const filteredGameStats = uniqueGameStats.filter(gameStat => {
   const [minutes, seconds] = gameStat.formattedTime.split(':').map(Number);
   const totalTimeInSeconds = minutes * 60 + seconds;
-  return totalTimeInSeconds >= 10;
+  
+  const isNotGuestUser = !gameStat.userName.name.startsWith("Guest User");
+
+  return totalTimeInSeconds >= 10 && isNotGuestUser;
 });
 
 filteredGameStats.sort((a, b) => {
