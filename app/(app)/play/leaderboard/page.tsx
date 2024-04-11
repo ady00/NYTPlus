@@ -61,7 +61,7 @@ const Page = async () => {
    if (!gamesData) return null
 
 
-   const twoDaysAgo = subDays(new Date(), 2);
+   const twoDaysAgo = subDays(new Date(), 1);
 
    // Format the date in ISO8601 format
    const twoDaysAgoISO = formatISO(twoDaysAgo);
