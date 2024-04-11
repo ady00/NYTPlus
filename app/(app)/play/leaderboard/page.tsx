@@ -52,31 +52,6 @@ const Page = async () => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
  const { data: gamesData } = await supabase
    .from('games')
    .select('*')
@@ -86,10 +61,10 @@ const Page = async () => {
    if (!gamesData) return null
 
 
-   const fiveDaysAgo = subDays(new Date(), 2);
+   const twoDaysAgo = subDays(new Date(), 2);
 
    // Format the date in ISO8601 format
-   const fiveDaysAgoISO = formatISO(fiveDaysAgo);
+   const twoDaysAgoISO = formatISO(twoDaysAgo);
    
 
 
@@ -97,7 +72,7 @@ const Page = async () => {
    .from('status_of_game')
    .select('*')
    .eq('status', 'completed')
-   .gt('game_ended_at', fiveDaysAgoISO);
+   .gt('game_ended_at', twoDaysAgoISO);
 
   if (!statusData) return null
 
@@ -183,8 +158,7 @@ gamesData.forEach( async (game) => {
 
 const gameStats = Object.values(gameStatsMap);
 
-gameStats.filter(stats => !stats.userName.name.startsWith("Guest User"));
-
+gameStats.filter(stats => stats.userName?.name && !stats.userName?.name?.startsWith("Guest User"));
 
 gameStats.sort((a, b) => {
   const [minutesA, secondsA] = a.formattedTime.split(':').map(Number);
@@ -251,7 +225,7 @@ const filteredGameStats = uniqueGameStats.filter(gameStat => {
   const [minutes, seconds] = gameStat.formattedTime.split(':').map(Number);
   const totalTimeInSeconds = minutes * 60 + seconds;
   
-  const isNotGuestUser = !gameStat.userName.name.startsWith("Guest User");
+  const isNotGuestUser = !gameStat.userName?.name?.startsWith("Guest User");
 
   return totalTimeInSeconds >= 10 && isNotGuestUser;
 });
@@ -296,7 +270,7 @@ if (!filteredGameStats) return null
         {index === 1 && '🥈'}
         {index === 2 && '🥉'}
         <i>{index > 2 && `${index + 1}${getSuffix(index + 1)}. `}</i>
-        <b>{trimmedName}</b> — {game?.minutes}m, {game?.seconds}s
+        <b>{trimmedName.trim() !== '' ? trimmedName : 'RobCrossword'}</b> — {game?.minutes}m, {game?.seconds}s
       </li>
     );
   })}
