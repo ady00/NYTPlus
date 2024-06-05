@@ -42,8 +42,6 @@ const Page = async () => {
    .limit(1);
 
 
-
-
  if (!data) return null
 
 

@@ -38,6 +38,7 @@ export async function POST(request: Request): Promise<Response> {
   const grid = game.grid
   const user = game.created_by
   const puzzle_id = game.puzzle_id
+  const created_at = game.created_at
 
   console.log(user)
 
@@ -51,7 +52,7 @@ export async function POST(request: Request): Promise<Response> {
 
   const { error: updatedGameError } = await dangerousSupabase
     .from('status_of_game')
-    .update({ status: 'completed', game_ended_at: new Date().toISOString(), user_id: user, metadata: puzzle_id })
+    .update({ status: 'completed', game_ended_at: new Date().toISOString(), user_id: user, metadata: puzzle_id, created_at: created_at})
     .eq('id', req)
     .single()
 
