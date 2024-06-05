@@ -50,21 +50,57 @@ const Page = async () => {
  const mostRecentPuzzle = data[0];
  const puzzleId = mostRecentPuzzle.id;
 
+ const dayAgo = subDays(new Date(), 1);
+
+   // Format the date in ISO8601 format
+   const DaysAgoISO = formatISO(dayAgo);
+
 
 
  const { data: gamesData } = await supabase
    .from('games')
    .select('*')
-   .eq('puzzle_id', puzzleId);
+   .eq('puzzle_id', puzzleId)
+   .gt('created_at', DaysAgoISO);
+
+
+
 
 
    if (!gamesData) return null
 
+   gamesData.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
 
-   const twoDaysAgo = subDays(new Date(), 1);
+   // Create a Set to track unique user IDs
+   const uniqueUserIds = new Set<string>(); // Assuming created_by is of type string
+   const filteredGamesData: { created_at: string; created_by: string }[] = []; // Explicitly type filteredGamesData
 
-   // Format the date in ISO8601 format
-   const twoDaysAgoISO = formatISO(twoDaysAgo);
+   gamesData.forEach((game: { created_at: string; created_by: string }) => {
+       if (!uniqueUserIds.has(game.created_by)) {
+           uniqueUserIds.add(game.created_by);
+           filteredGamesData.push(game);
+       }
+   });
+
+   // Log the user IDs from the filtered games data
+   let counter = 1;
+   filteredGamesData.forEach(game => {
+      console.log(counter++);
+       console.log(game.created_by);
+   });
+
+   
+   const userIds = gamesData.map(game => game.created_by);
+
+
+
+
+
+
+
+
+
+   
    
 
 
@@ -72,32 +108,44 @@ const Page = async () => {
    .from('status_of_game')
    .select('*')
    .eq('status', 'completed')
-   .gt('game_ended_at', twoDaysAgoISO);
+   .eq('metadata', puzzleId)
+
+   .gt('game_ended_at', DaysAgoISO);
 
   if (!statusData) return null
+
+
+  statusData.forEach(status => {
+    console.log(`Game ID: ${status.id}, Status: ${status.status}, Ended At: ${status.game_ended_at}`);
+});
+
+
+
+
+
+ 
 
 
  const { data: usersData } = await supabase
    .from('user_real')
    .select('*')
+   .not('email', 'like', '%@guest.com');
 
 
    if (!usersData) return null
+
+   const filteredUsersData = usersData.filter(user => userIds.includes(user.id));
+   const userIdsFromFilteredUsers = filteredUsersData.map(user => user.id);
+
+
+
+  // Create an array that contains the IDs of the filtered users
 
 
 
 const gameStatsMap: { [key: string]: any } = {};
 
-// start here
-interface Game {
-  created_at: string;
-  created_by: string;
-  grid: string[];
-  id: string;
-  password: string;
-  puzzle_id: string;
-  updated_at: string;
-}
+// here we go!
 
 interface StatusData {
   game_ended_at: string | null;

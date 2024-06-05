@@ -61,6 +61,8 @@ export interface Database {
           password: string
           puzzle_id: string
           updated_at: string
+          game_ended_at: string | null
+          status: Database["public"]["Enums"]["game_status"]
         }
         Insert: {
           created_at?: string
@@ -70,6 +72,10 @@ export interface Database {
           password?: string
           puzzle_id: string
           updated_at?: string
+          game_ended_at?: string | null
+          status?: Database["public"]["Enums"]["game_status"]
+
+
         }
         Update: {
           created_at?: string
@@ -79,6 +85,10 @@ export interface Database {
           password?: string
           puzzle_id?: string
           updated_at?: string
+          game_ended_at?: string | null
+          status?: Database["public"]["Enums"]["game_status"]
+
+
         }
         Relationships: [
           {
