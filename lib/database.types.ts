@@ -198,6 +198,10 @@ export interface Database {
           game_ended_at: string | null
           id: string
           status: Database["public"]["Enums"]["game_status"]
+          puzzle_id: string
+          created_at: string
+          metadata: string
+          user_id: string
         }
         Insert: {
           game_ended_at?: string | null

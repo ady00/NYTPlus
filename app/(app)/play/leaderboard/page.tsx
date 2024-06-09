@@ -48,7 +48,7 @@ const Page = async () => {
  const mostRecentPuzzle = data[0];
  const puzzleId = mostRecentPuzzle.id;
 
- const dayAgo = subDays(new Date(), 1);
+ const dayAgo = subDays(new Date(), 7);
 
    // Format the date in ISO8601 format
    const DaysAgoISO = formatISO(dayAgo);
@@ -80,15 +80,9 @@ const Page = async () => {
        }
    });
 
-   // Log the user IDs from the filtered games data
-   let counter = 1;
-   filteredGamesData.forEach(game => {
-      console.log(counter++);
-       console.log(game.created_by);
-   });
+   
 
    
-   const userIds = gamesData.map(game => game.created_by);
 
 
 
@@ -112,98 +106,54 @@ const Page = async () => {
 
   if (!statusData) return null
 
-
-  statusData.forEach(status => {
-    console.log(`Game ID: ${status.id}, Status: ${status.status}, Ended At: ${status.game_ended_at}`);
-});
-
-
-
-
-
- 
-
-
- const { data: usersData } = await supabase
+  const { data: usersData } = await supabase
    .from('user_real')
    .select('*')
-   .not('email', 'like', '%@guest.com');
+   .gt('updated_at', DaysAgoISO);
+
 
 
    if (!usersData) return null
 
-   const filteredUsersData = usersData.filter(user => userIds.includes(user.id));
-   const userIdsFromFilteredUsers = filteredUsersData.map(user => user.id);
 
+  const gameStatsMap: { [key: string]: any } = {};
 
+  statusData.forEach( async (game) => {
+    const createdDate = new Date(game.created_at);
+    const endedDate = game.game_ended_at ? new Date(game.game_ended_at) : null;
 
-  // Create an array that contains the IDs of the filtered users
-
-
-
-const gameStatsMap: { [key: string]: any } = {};
-
-// here we go!
-
-interface StatusData {
-  game_ended_at: string | null;
-  id: string;
-  status: "ongoing" | "completed" | "abandoned";
-  user_id: string;
-}
-
-async function findStatusObject(statusData: StatusData[], gameId: string): Promise<StatusData | null> {
-  if (!statusData || statusData.length === 0 || !gameId) {
-      return null;
-
-  }
-  const statusObject = statusData.find(status => status.id === gameId);
-  return statusObject || null;
-}
-
-
-gamesData.forEach( async (game) => {
- const matchedStatus = statusData.find(status => status.id === game.id);
-  
+    if (endedDate) {
+      const differenceInSeconds = Math.floor((endedDate.getTime() - createdDate.getTime()) / 1000)
  
- if (matchedStatus) {
+      const minutes = Math.floor(differenceInSeconds / 60);
+      const seconds = differenceInSeconds % 60;
+ 
+      const formattedTime = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+ 
+      const user = usersData.find(user => user.id === game.user_id);
+      console.log("user is " + user)
+      const userName = user ? user.raw_user_meta_data : 'Unknown';
 
-  const createdDate = new Date(game.created_at);
-   const endedDate = matchedStatus.game_ended_at ? new Date(matchedStatus.game_ended_at) : null;
+      if (!gameStatsMap[game.id] || gameStatsMap[game.id].formattedTime.length < formattedTime.length) {
+        gameStatsMap[game.id] = {
+          gameId: game.id,
+          userID: game.user_id,
+          userName: userName,
+          formattedTime: formattedTime,
+          minutes: minutes,
+          seconds: seconds
+ 
+        };
+      }
+    }
+  });
 
+  
 
-   if (endedDate) {
-     const differenceInSeconds = Math.floor((endedDate.getTime() - createdDate.getTime()) / 1000)
-
-     const minutes = Math.floor(differenceInSeconds / 60);
-     const seconds = differenceInSeconds % 60;
-
-     const formattedTime = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-
-     const user = usersData.find(user => user.id === game.created_by);
-     const userEmail = user ? user.email : 'Unknown';
-     const userName = user ? user.raw_user_meta_data : 'Unknown';
-
-     if (!gameStatsMap[game.id] || gameStatsMap[game.id].formattedTime.length < formattedTime.length) {
-       gameStatsMap[game.id] = {
-         gameId: game.id,
-         userEmail: userEmail,
-         userName: userName,
-         formattedTime: formattedTime,
-         minutes: minutes,
-         seconds: seconds
-
-       };
-     }
-   }
- }
-});
+  const gameStats = Object.values(gameStatsMap);
 
 
-
-
-const gameStats = Object.values(gameStatsMap);
-
+// here we go!!!!!
 gameStats.filter(stats => stats.userName?.name && !stats.userName?.name?.startsWith("Guest User"));
 
 gameStats.sort((a, b) => {
@@ -217,6 +167,10 @@ gameStats.sort((a, b) => {
   }
 
   return secondsA - secondsB;
+});
+
+gameStats.forEach(gameStats => {
+  console.log(gameStats);
 });
 
 
@@ -292,6 +246,7 @@ if (!filteredGameStats) return null
  return (
    <div className="flex flex-col h-full py-5">
      <Heading className="flex px-5">Daily Leaderboard for {mostRecentPuzzle.name}</Heading>
+     <i><p className = "px-5">Guest Accounts are not displayed on the daily leaderboard.</p></i>
     
 
 
