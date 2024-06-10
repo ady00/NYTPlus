@@ -32,7 +32,7 @@ const Form = () => {
 
   const guestRegister = async () => {
 
-    const names = ["Deckard", "Neo", "Dalton", "Landa", "Hellstrom", "Hicox", "Hayes", "Fillmore", "Zane", "Suleiman", "Phillipa", "Cobb"];
+    const names = ["Deckard", "Neo", "Dalton", "Landa", "Hellstrom", "Hicox", "Hayes", "Fillmore", "Zane", "Suleiman", "Phillipa", "Monroe", "Van Buren", "Sumner", "Ringo", "Pleasonton", "Pleasonton","Pleasonton"];
 
     const supabase = createClient<Database>()
 
