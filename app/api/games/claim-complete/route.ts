@@ -34,11 +34,20 @@ export async function POST(request: Request): Promise<Response> {
     return Response.json({ error: 'Game not found' })
   }
 
+  const { data: users, error: userError } = await dangerousSupabase
+    .from('user_real')
+    .select('*')
+    .eq('id', game.created_by)
+    .single()
+
+
   const puzzle = game.puzzles
   const grid = game.grid
   const user = game.created_by
   const puzzle_id = game.puzzle_id
   const created_at = game.created_at
+  const username = users.raw_user_meta_data.name
+  console.log(username)
 
   console.log(user)
 
@@ -52,7 +61,7 @@ export async function POST(request: Request): Promise<Response> {
 
   const { error: updatedGameError } = await dangerousSupabase
     .from('status_of_game')
-    .update({ status: 'completed', game_ended_at: new Date().toISOString(), user_id: user, metadata: puzzle_id, created_at: created_at})
+    .update({ status: 'completed', game_ended_at: new Date().toISOString(), user_id: user, metadata: puzzle_id, created_at: created_at, username: username })
     .eq('id', req)
     .single()
 

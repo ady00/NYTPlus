@@ -202,6 +202,7 @@ export interface Database {
           created_at: string
           metadata: string
           user_id: string
+          username: string
         }
         Insert: {
           game_ended_at?: string | null

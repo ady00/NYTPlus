@@ -2,22 +2,13 @@ import React, { useEffect, useRef } from 'react';
 import { Heading, Tabs } from '@radix-ui/themes'
 import { cookies } from 'next/headers'
 
-import { subDays, formatISO } from 'date-fns';
-
-
-
 import { type Database } from '@/lib/database.types'
 import { createClient } from '@/utils/supabase/server'
 
 
-import Chart from 'chart.js/auto';
-
 import Graph from './graph';
 
 
-import * as Accordion from '@radix-ui/react-accordion';
-import { ChevronDownIcon } from '@radix-ui/react-icons';
-import classNames from 'classnames';
 
 
 
@@ -47,28 +38,11 @@ const Page = async () => {
 
 
 
- const { data: gamesData } = await supabase
-   .from('games')
-   .select('*')
-   .eq('created_by', user?.id)
-
-
-   if (!gamesData) return null
-
-   const fiveDaysAgo = subDays(new Date(), 6);
-
-   // Format the date in ISO8601 format
-   const fiveDaysAgoISO = formatISO(fiveDaysAgo);
-
-
-
  const { data: statusData } = await supabase
    .from('status_of_game')
    .select('*')
    .eq('status', 'completed')
-   .gt('game_ended_at', fiveDaysAgoISO);
-
-
+   .eq('user_id', user?.id)
 
 
   if (!statusData) return null
@@ -80,8 +54,6 @@ const Page = async () => {
    .select('*')
    .eq('id', user?.id)
 
-
-
    if (!usersData) return null
 
 
@@ -89,15 +61,13 @@ const Page = async () => {
 const gameStatsMap: { [key: string]: any } = {};
 
 
-gamesData.forEach((game) => {
- const matchedThing = statusData.find(thing => thing.id === game.id);
- if (matchedThing) {
+statusData.forEach( async (game) => {
 
-  const createdDate = new Date(game.created_at);
-   const endedDate = matchedThing.game_ended_at ? new Date(matchedThing.game_ended_at) : null;
+  const createdDate = game.created_at ? new Date(game.created_at) : null;
+  const endedDate = game.game_ended_at ? new Date(game.game_ended_at) : new Date(game.created_at);
 
 
-   if (endedDate) {
+   if (createdDate && endedDate) {
      const differenceInSeconds = Math.floor((endedDate.getTime() - createdDate.getTime()) / 1000)
 
      const minutes = Math.floor(differenceInSeconds / 60);
@@ -105,7 +75,7 @@ gamesData.forEach((game) => {
 
      const formattedTime = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
-     const user = usersData.find(user => user.id === game.created_by);
+     const user = usersData.find(user => user.id === game.user_id);
      const userEmail = user ? user.email : 'Unknown';
      const userName = user ? user.raw_user_meta_data : 'Unknown';
 
@@ -121,15 +91,17 @@ gamesData.forEach((game) => {
 
        };
      }
-   }
- }
+   } 
+});
+
+Object.values(gameStatsMap).forEach(gameStats => {
+  console.log(gameStats.formattedTime);
 });
 
 
 
 
 const gameStats = Object.values(gameStatsMap);
-
 
 
 
@@ -230,6 +202,8 @@ thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
 const pastThirtyDaysGameStats = gameStats.filter(game => game.date >= thirtyDaysAgo);
 const pastThirtyDaysStatistics = calculateStatistics(pastThirtyDaysGameStats);
+const isGuestUser = userReal.raw_user_meta_data.name.startsWith("Guest User");
+
 
 
 
@@ -237,42 +211,45 @@ const pastThirtyDaysStatistics = calculateStatistics(pastThirtyDaysGameStats);
 
 
  return (
-   <div className="flex flex-col h-full py-5">
-     <Heading className="flex px-5 pb-2">Stats for {userReal.raw_user_meta_data.name}</Heading>
-
-     <Graph 
-       gameStats={gameStats}
-  mean={{
-    monthly: pastThirtyDaysStatistics.average,
-    weekly: pastWeekStatistics.average,
-    alltime: statistics.average
-  }}
-  median={{
-    monthly: pastThirtyDaysStatistics.median,
-    weekly: pastWeekStatistics.median,
-    alltime: statistics.median
-  }}
-  fastest={{
-    monthly: pastThirtyDaysStatistics.fastest,
-    weekly: pastWeekStatistics.fastest,
-    alltime: statistics.fastest
-  }}
-  slowest={{
-    monthly: pastThirtyDaysStatistics.slowest,
-    weekly: pastWeekStatistics.slowest,
-    alltime: statistics.slowest
-  }}
-/>      
-
-
-
+  
+  <div className="flex flex-col h-full py-5">
+  {isGuestUser ? (
+    <div className="flex px-5 pb-2">
+     <b>Guest Users do not have access to the stats page. Log out and create an account to start viewing your stats!</b> 
+    </div>
+  ) : (
+    <>
+      <Heading className="flex px-5 pb-2">Stats for {userReal.raw_user_meta_data.name}</Heading>
+      <div>
+        <Graph 
+          gameStats={gameStats}
+          mean={{
+            monthly: pastThirtyDaysStatistics.average,
+            weekly: pastWeekStatistics.average,
+            alltime: statistics.average
+          }}
+          median={{
+            monthly: pastThirtyDaysStatistics.median,
+            weekly: pastWeekStatistics.median,
+            alltime: statistics.median
+          }}
+          fastest={{
+            monthly: pastThirtyDaysStatistics.fastest,
+            weekly: pastWeekStatistics.fastest,
+            alltime: statistics.fastest
+          }}
+          slowest={{
+            monthly: pastThirtyDaysStatistics.slowest,
+            weekly: pastWeekStatistics.slowest,
+            alltime: statistics.slowest
+          }}
+        /> 
+      </div>
+    </>
+  )}
 </div>
-    
-  
-
-  
- )
-}
+);
+};
 
 
 export default Page

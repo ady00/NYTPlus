@@ -102,14 +102,16 @@ const Page = async () => {
    .eq('status', 'completed')
    .eq('metadata', puzzleId)
 
-   .gt('game_ended_at', DaysAgoISO);
 
   if (!statusData) return null
 
   const { data: usersData } = await supabase
    .from('user_real')
    .select('*')
+   .not('email', 'like', '%@guest.com')
    .gt('updated_at', DaysAgoISO);
+
+
 
 
 
@@ -131,7 +133,6 @@ const Page = async () => {
       const formattedTime = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
  
       const user = usersData.find(user => user.id === game.user_id);
-      console.log("user is " + user)
       const userName = user ? user.raw_user_meta_data : 'Unknown';
 
       if (!gameStatsMap[game.id] || gameStatsMap[game.id].formattedTime.length < formattedTime.length) {
@@ -169,9 +170,7 @@ gameStats.sort((a, b) => {
   return secondsA - secondsB;
 });
 
-gameStats.forEach(gameStats => {
-  console.log(gameStats);
-});
+
 
 
 interface GameStat {
@@ -247,7 +246,6 @@ if (!filteredGameStats) return null
    <div className="flex flex-col h-full py-5">
      <Heading className="flex px-5">Daily Leaderboard for {mostRecentPuzzle.name}</Heading>
      <i><p className = "px-5">Guest Accounts are not displayed on the daily leaderboard.</p></i>
-    
 
 
      <ol className="px-2 py-2 my-2" style={{ fontSize: '1.1em' }}>
