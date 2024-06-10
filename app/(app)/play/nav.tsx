@@ -40,14 +40,21 @@ const Nav = () => {
             <li>
               <Link href="/play/leaderboard" className="flex items-center gap-2">
                 <ListBulletIcon />
-                  Leaderboard
+                  Leaderboard  
+                  <span className="inline-flex items-center justify-center rounded-full bg-emerald-100 px-2.5 py-0.5 text-emerald-700">
+                    Fixed!
+                  </span>
               </Link>
+              
             </li>
 
             <li>
               <Link href="/play/stats" className="flex items-center gap-2">
                 <MagnifyingGlassIcon />
                   Stats
+                  <span className="inline-flex items-center justify-center rounded-full bg-emerald-100 px-2.5 py-0.5 text-emerald-700">
+                    Fixed!
+                  </span>
               </Link>
             </li>
       

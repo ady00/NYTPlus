@@ -220,6 +220,9 @@ const isGuestUser = userReal.raw_user_meta_data.name.startsWith("Guest User");
   ) : (
     <>
       <Heading className="flex px-5 pb-2">Stats for {userReal.raw_user_meta_data.name}</Heading>
+      <div className="flex px-5 pb-2">
+     <i>Stats were reset on Jun 9, 2024 due to a much-needed overhaul to the way game info was stored. The stats page is currently under active development.</i> 
+    </div>
       <div>
         <Graph 
           gameStats={gameStats}
