@@ -256,7 +256,7 @@ return (
           <p className="italic text-sm">Slowest Time</p>
         </div>
       </div>
-      <Line data={monthData} />
+      <Line data={monthData} options = {options} />
 
       </div>
     </Tabs.Content>
@@ -282,7 +282,7 @@ return (
           <p className="italic text-sm">Slowest Time</p>
         </div>
       </div>
-      <Line data={allTimeData} />
+      <Line data={allTimeData} options = {options}/>
 
       </div>
     </Tabs.Content>
