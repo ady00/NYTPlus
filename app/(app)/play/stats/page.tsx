@@ -8,17 +8,9 @@ import { createClient } from '@/utils/supabase/server'
 
 import Graph from './graph';
 
-
-
-
-
-
-
-
 export const metadata = {
  title: 'Stats',
 }
-
 
 const Page = async () => {
  const cookieStore = cookies()
@@ -44,10 +36,13 @@ const Page = async () => {
    .eq('status', 'completed')
    .eq('user_id', user?.id)
 
-
   if (!statusData) return null
 
+  const { data: puzzleData } = await supabase
+   .from('puzzles')
+   .select('*')
 
+   if (!puzzleData) return null
 
  const { data: usersData } = await supabase
    .from('user_real')
@@ -55,6 +50,19 @@ const Page = async () => {
    .eq('id', user?.id)
 
    if (!usersData) return null
+
+function parseDate(dateString: string): Date {
+  const datePart = dateString.split(', ').slice(1).join(', ');
+
+  const date = new Date(datePart);
+
+  // Check if the date is valid
+  if (isNaN(date.getTime())) {
+      throw new Error('Invalid date format');
+  }
+
+  return date;
+}
 
 
 
@@ -68,42 +76,57 @@ statusData.forEach( async (game) => {
 
 
    if (createdDate && endedDate) {
-     const differenceInSeconds = Math.floor((endedDate.getTime() - createdDate.getTime()) / 1000)
+    const differenceInSeconds = Math.floor((endedDate.getTime() - createdDate.getTime()) / 1000)
 
-     const minutes = Math.floor(differenceInSeconds / 60);
-     const seconds = differenceInSeconds % 60;
+    const minutes = Math.floor(differenceInSeconds / 60);
+    const seconds = differenceInSeconds % 60;
 
-     const formattedTime = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    const formattedTime = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
-     const user = usersData.find(user => user.id === game.user_id);
-     const userEmail = user ? user.email : 'Unknown';
-     const userName = user ? user.raw_user_meta_data : 'Unknown';
-
-     if (!gameStatsMap[game.id] || gameStatsMap[game.id].formattedTime.length < formattedTime.length) {
-       gameStatsMap[game.id] = {
-         gameId: game.id,
-         userEmail: userEmail,
-         userName: userName,
-         formattedTime: formattedTime,
-         minutes: minutes,
-         seconds: seconds,
-         date: endedDate
-
-       };
-     }
-   } 
+    const puzzle_id = game.metadata
+    const puzzle = puzzleData.find((puzzle: any) => puzzle.id === puzzle_id);
+     
+    if (!gameStatsMap[game.id] || gameStatsMap[game.id].formattedTime.length < formattedTime.length) {
+      gameStatsMap[game.id] = {
+        gameId: game.id,
+        puzzle_name: puzzle?.name,
+        formattedTime: formattedTime,
+        minutes: minutes,
+        seconds: seconds,
+        date: parseDate(puzzle?.name || ""),
+        checkDate: endedDate
+      }; 
+    }
+  } 
 });
 
-Object.values(gameStatsMap).forEach(gameStats => {
-  console.log(gameStats.formattedTime);
-});
-
-
-
+interface GameStats {
+  gameId: string;
+  puzzle_name: string | undefined;
+  formattedTime: string;
+  minutes: number;
+  seconds: number;
+  date: Date;
+  checkDate: Date;
+}
 
 const gameStats = Object.values(gameStatsMap);
+gameStats.sort((a, b) => a.date.getTime() - b.date.getTime());
 
+const earliestDateMap = new Map<string, GameStats>();
 
+gameStats.forEach((stat) => {
+    const existing = earliestDateMap.get(stat.puzzle_name || "");
+
+    if (!existing || stat.checkDate < existing.checkDate) {
+        earliestDateMap.set(stat.puzzle_name || "", stat);
+    }
+});
+
+// Convert the map back to an array
+const uniqueGameStats = Array.from(earliestDateMap.values());
+
+console.log(uniqueGameStats);
 
 
 interface GameObject {
@@ -111,19 +134,16 @@ interface GameObject {
   date: Date
   minutes: BigInteger
   seconds: BigInteger
+  checkDate: Date
   
 }
+
+
 
   function timeStringToSeconds(timeString: string): number {
     const [minutes, seconds] = timeString.split(":").map(Number);
     return minutes * 60 + seconds;
   }
-
-  function secondsToTimeString(seconds: number): string {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
-}
 
 function calculateAverageTime(gameStats: GameObject[]): string {
   const totalSeconds = gameStats.reduce((acc, game) => acc + timeStringToSeconds(game.formattedTime), 0);
@@ -204,12 +224,6 @@ const pastThirtyDaysGameStats = gameStats.filter(game => game.date >= thirtyDays
 const pastThirtyDaysStatistics = calculateStatistics(pastThirtyDaysGameStats);
 const isGuestUser = userReal.raw_user_meta_data.name.startsWith("Guest User");
 
-
-
-
-
-
-
  return (
   
   <div className="flex flex-col h-full py-5">
@@ -225,7 +239,7 @@ const isGuestUser = userReal.raw_user_meta_data.name.startsWith("Guest User");
     </div>
       <div>
         <Graph 
-          gameStats={gameStats}
+          gameStats={uniqueGameStats}
           mean={{
             monthly: pastThirtyDaysStatistics.average,
             weekly: pastWeekStatistics.average,

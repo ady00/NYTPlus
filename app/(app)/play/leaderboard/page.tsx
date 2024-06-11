@@ -228,7 +228,7 @@ const filteredGameStats = uniqueGameStats.filter(gameStat => {
   
   const isNotGuestUser = !gameStat.userName?.name?.startsWith("Guest User");
 
-  return totalTimeInSeconds >= 10 && isNotGuestUser;
+  return totalTimeInSeconds >= 7 && isNotGuestUser;
 });
 
 filteredGameStats.sort((a, b) => {

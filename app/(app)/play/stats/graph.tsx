@@ -57,11 +57,6 @@ type Props = {
   };
 }
 
-
-
-
-
-
 const Graph: React.FC<Props> = ({ mean, median, fastest, slowest, gameStats }) => {
 
   const filteredGameStats: GameObject[] = [];
