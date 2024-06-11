@@ -135,11 +135,13 @@ const Page = async () => {
       const user = usersData.find(user => user.id === game.user_id);
       const userName = user ? user.raw_user_meta_data : 'Unknown';
 
+      console.log(game.username)
+
       if (!gameStatsMap[game.id] || gameStatsMap[game.id].formattedTime.length < formattedTime.length) {
         gameStatsMap[game.id] = {
           gameId: game.id,
           userID: game.user_id,
-          userName: userName,
+          userName: {name: game.username},
           formattedTime: formattedTime,
           minutes: minutes,
           seconds: seconds
