@@ -16,6 +16,7 @@ const Page = async () => {
   const supabase = createClient<Database>(cookieStore)
 
   const {
+    
     data: { user },
   } = await supabase.auth.getUser()
 
