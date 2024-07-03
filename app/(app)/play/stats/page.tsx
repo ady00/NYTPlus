@@ -28,6 +28,15 @@ const Page = async () => {
    .eq('id', user?.id)
    .single()
 
+  
+   const { data: notFinishedData } = await supabase
+    .from('status_of_game')
+    .select('*')
+    .eq('user_id', user?.id)
+
+    if (!notFinishedData) return null
+
+
 
 
  const { data: statusData } = await supabase
@@ -66,7 +75,11 @@ function parseDate(dateString: string): Date {
 
 
 
+
+
 const gameStatsMap: { [key: string]: any } = {};
+
+const completionRate =  ((statusData.length / notFinishedData.length) * 100).toString(); //  gives the user completion rate for puzzles 
 
 
 statusData.forEach( async (game) => {
@@ -126,7 +139,6 @@ gameStats.forEach((stat) => {
 // Convert the map back to an array
 const uniqueGameStats = Array.from(earliestDateMap.values());
 
-console.log(uniqueGameStats);
 
 
 interface GameObject {
@@ -169,6 +181,70 @@ function calculateAverageTime(gameStats: GameObject[]): string {
   }
 }
 
+const oneWeekAgo = new Date();
+oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+const thirtyDaysAgo = new Date();
+thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+const pastWeekGameStats = gameStats.filter(game => game.date >= oneWeekAgo);
+
+const weeklyGamesCompleted = pastWeekGameStats.length
+
+pastWeekGameStats.sort((a, b) => a.date.getTime() - b.date.getTime());
+
+  let weeklongestStreak = 1;
+  let weekcurrentStreak = 1;
+  let weekpreviousDate = pastWeekGameStats[0].date;
+
+  for (let i = 1; i < pastWeekGameStats.length; i++) {
+    const currentDate = pastWeekGameStats[i].date;
+    const differenceInDays = (currentDate.getTime() - weekpreviousDate.getTime()) / (1000 * 60 * 60 * 24);
+
+    if (differenceInDays === 1) {
+      weekcurrentStreak += 1;
+    } else if (differenceInDays > 1) {
+      weeklongestStreak = 1;
+    }
+
+    weeklongestStreak = Math.max(weeklongestStreak, weekcurrentStreak);
+    weekpreviousDate = currentDate;
+  }
+
+
+
+
+
+const pastThirtyDaysGameStats = gameStats.filter(game => game.date >= thirtyDaysAgo);
+
+const monthlyGamesCompleted = pastThirtyDaysGameStats.length
+
+const allGamesCompleted = gameStats.length
+
+
+pastThirtyDaysGameStats.sort((a, b) => a.date.getTime() - b.date.getTime());
+
+  let ThirtylongestStreak = 1;
+  let ThirtycurrentStreak = 1;
+  let ThirtypreviousDate = pastThirtyDaysGameStats[0].date;
+
+  for (let i = 1; i < pastThirtyDaysGameStats.length; i++) {
+    const currentDate = pastThirtyDaysGameStats[i].date;
+    const differenceInDays = (currentDate.getTime() - ThirtypreviousDate.getTime()) / (1000 * 60 * 60 * 24);
+
+    if (differenceInDays === 1) {
+      ThirtycurrentStreak += 1;
+    } else if (differenceInDays > 1) {
+      ThirtylongestStreak = 1;
+    }
+
+    ThirtylongestStreak = Math.max(ThirtylongestStreak, ThirtycurrentStreak);
+    ThirtypreviousDate = currentDate;
+  }
+
+
+
+
 
 
 
@@ -187,11 +263,37 @@ function calculateStatistics(gameStats: GameObject[]): { fastest: string, slowes
   return { fastest, slowest, average, median };
 }
 
-const oneWeekAgo = new Date();
-oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 
-const pastWeekGameStats = gameStats.filter(game => game.date >= oneWeekAgo);
+
 const pastWeekStatistics = calculateStatistics(pastWeekGameStats);
+
+
+gameStats.sort((a, b) => a.date.getTime() - b.date.getTime());
+
+  let longestStreak = 1;
+  let currentStreak = 1;
+  let previousDate = gameStats[0].date;
+
+  for (let i = 1; i < gameStats.length; i++) {
+    const currentDate = gameStats[i].date;
+    const differenceInDays = (currentDate.getTime() - previousDate.getTime()) / (1000 * 60 * 60 * 24);
+
+    if (differenceInDays === 1) {
+      currentStreak += 1;
+    } else if (differenceInDays > 1) {
+      currentStreak = 1;
+    }
+
+    longestStreak = Math.max(longestStreak, currentStreak);
+    previousDate = currentDate;
+  }
+
+console.log(longestStreak)
+
+
+
+
+
 
 
 function formatTime(seconds: number): string {
@@ -217,10 +319,34 @@ function formatTime(seconds: number): string {
 
 const statistics = calculateStatistics(gameStats);
 
-const thirtyDaysAgo = new Date();
-thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-const pastThirtyDaysGameStats = gameStats.filter(game => game.date >= thirtyDaysAgo);
+
+  const weeklyCompletedGames = statusData.filter(game => new Date(game.created_at) >= oneWeekAgo);
+  const monthlyCompletedGames = statusData.filter(game => new Date(game.created_at) >= thirtyDaysAgo);
+
+  const weeklyGames = notFinishedData.filter(game => new Date(game.created_at) >= oneWeekAgo);
+  const monthlyGames = notFinishedData.filter(game => new Date(game.created_at) >= thirtyDaysAgo);
+
+  const weeklyCompletionRate =  ((weeklyCompletedGames.length / weeklyGames.length) * 100).toString(); 
+  const monthlyCompletionRate =  ((monthlyCompletedGames.length / monthlyGames.length) * 100).toString(); 
+
+
+
+
+  
+
+
+
+
+
+console.log(longestStreak)
+
+
+
+
+
+
+
 const pastThirtyDaysStatistics = calculateStatistics(pastThirtyDaysGameStats);
 const isGuestUser = userReal.raw_user_meta_data.name.startsWith("Guest User");
 
@@ -259,6 +385,21 @@ const isGuestUser = userReal.raw_user_meta_data.name.startsWith("Guest User");
             monthly: pastThirtyDaysStatistics.slowest,
             weekly: pastWeekStatistics.slowest,
             alltime: statistics.slowest
+          }}
+          completion = {{
+            monthly: monthlyCompletionRate,
+            weekly: weeklyCompletionRate,
+            alltime: completionRate
+          }}
+          streak = {{
+            monthly: ThirtylongestStreak.toString(),
+            weekly: weeklongestStreak.toString(),
+            alltime: longestStreak.toString(), 
+          }}
+          finished = {{
+            monthly: monthlyCompletedGames.length.toString(),
+            weekly: weeklyCompletedGames.length.toString(),
+            alltime: allGamesCompleted.toString()
           }}
         /> 
       </div>

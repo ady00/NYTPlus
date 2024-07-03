@@ -55,9 +55,26 @@ type Props = {
     weekly: string;
     alltime: string;
   };
+  completion: {
+    monthly: string;
+    weekly: string;
+    alltime: string;
+  }
+  streak:
+  {
+    monthly: string;
+    weekly: string;
+    alltime: string;
+  }
+  finished:
+  {
+    monthly: string;
+    weekly: string;
+    alltime: string;
+  }
 }
 
-const Graph: React.FC<Props> = ({ mean, median, fastest, slowest, gameStats }) => {
+const Graph: React.FC<Props> = ({ mean, median, fastest, slowest, completion, streak, finished, gameStats }) => {
 
   const filteredGameStats: GameObject[] = [];
   const dateMap = new Map<string, GameObject>();
@@ -83,8 +100,6 @@ const Graph: React.FC<Props> = ({ mean, median, fastest, slowest, gameStats }) =
 
   // Extract dates
 
-
-  
 
   const weekAgo = new Date();
   weekAgo.setDate(weekAgo.getDate() - 7);
@@ -229,7 +244,26 @@ return (
           <p className="text-xl px-2 text-center">{slowest.weekly}</p>
           <p className="italic text-sm">Slowest Time</p>
         </div>
+        
       </div>
+
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-10 py-4">
+        <div className="h-32 rounded-lg flex flex-col justify-center items-center border border-dashed border-gray-400 lg:col-span-1">
+          <p className="text-xl px-2 text-center">{completion.weekly}%</p>
+          <p className="italic text-sm">Completion Rate</p>
+        </div>
+        <div className="h-32 rounded-lg flex flex-col justify-center items-center border border-dashed border-gray-400 lg:col-span-1">
+          <p className="text-xl px-2 text-center">{streak.weekly}</p>
+          <p className="italic text-sm">Longest Streak (weekly)</p>
+        </div>
+        <div className="h-32 rounded-lg flex flex-col justify-center items-center border border-dashed border-gray-400 lg:col-span-1">
+          <p className="text-xl px-2 text-center">{finished.weekly}</p>
+          <p className="italic text-sm">Completed Games (weekly)</p>
+        </div>
+      </div>
+
+
+      
       <Line data={weekData} options = {options}/>
 
       </div>    
@@ -254,6 +288,20 @@ return (
         <div className="h-32 rounded-lg flex flex-col justify-center items-center border border-dashed border-gray-400">
           <p className="text-xl px-2 text-center">{slowest.monthly}</p>
           <p className="italic text-sm">Slowest Time</p>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-10 py-4">
+        <div className="h-32 rounded-lg flex flex-col justify-center items-center border border-dashed border-gray-400 lg:col-span-1">
+          <p className="text-xl px-2 text-center">{completion.monthly}%</p>
+          <p className="italic text-sm">Completion Rate</p>
+        </div>
+        <div className="h-32 rounded-lg flex flex-col justify-center items-center border border-dashed border-gray-400 lg:col-span-1">
+          <p className="text-xl px-2 text-center">{streak.monthly}</p>
+          <p className="italic text-sm">Longest Streak (monthly)</p>
+        </div>
+        <div className="h-32 rounded-lg flex flex-col justify-center items-center border border-dashed border-gray-400 lg:col-span-1">
+          <p className="text-xl px-2 text-center">{finished.monthly}</p>
+          <p className="italic text-sm">Completed Games (monthly)</p>
         </div>
       </div>
       <Line data={monthData} options = {options} />
@@ -281,7 +329,25 @@ return (
           <p className="text-xl px-2 text-center">{slowest.alltime}</p>
           <p className="italic text-sm">Slowest Time</p>
         </div>
+        
       </div>
+
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-10 py-4">
+        <div className="h-32 rounded-lg flex flex-col justify-center items-center border border-dashed border-gray-400 lg:col-span-1">
+          <p className="text-xl px-2 text-center">{completion.alltime}%</p>
+          <p className="italic text-sm">Completion Rate</p>
+        </div>
+        <div className="h-32 rounded-lg flex flex-col justify-center items-center border border-dashed border-gray-400 lg:col-span-1">
+          <p className="text-xl px-2 text-center">{streak.alltime}</p>
+          <p className="italic text-sm">Longest Streak (alltime)</p>
+        </div>
+        <div className="h-32 rounded-lg flex flex-col justify-center items-center border border-dashed border-gray-400 lg:col-span-1">
+          <p className="text-xl px-2 text-center">{finished.alltime}</p>
+          <p className="italic text-sm">Completed Games (alltime)</p>
+        </div>
+      </div>
+
+
       <Line data={allTimeData} options = {options}/>
 
       </div>
