@@ -70,9 +70,10 @@ const Puzzles: React.FC<Props> = ({ session, puzzles }) => {
    setProfile(data as any)
 
 
+   if (data) {
+    setGames(data);
+  }
   
-  
-
 
  }, [supabase, user?.id])
 
@@ -86,6 +87,8 @@ const Puzzles: React.FC<Props> = ({ session, puzzles }) => {
 
 
 
+
+
  const sortedPuzzles = useMemo(() => {
    return [...puzzles].sort((a, b) => {
      return b.created_at.localeCompare(a.created_at)
@@ -93,67 +96,67 @@ const Puzzles: React.FC<Props> = ({ session, puzzles }) => {
  }, [puzzles])
 
 
+
  return (
-   <div className="min-w-[10rem]">
-     <hr className="relative mt-2 border-dashed border-gray-5" />
+  <div className="min-w-[10rem]">
+    <hr className="relative mt-2 border-dashed border-gray-5" />
 
+    <div className="puzzle-ids">
+      {games.map((game) => (
+        <div key={game.id}>{game.puzzle_id}</div>
+      ))}
+    </div>
 
-    
-    
-     <Table.Root
-       className={`w-full ${puzzles.length > 0 && 'h-full'}`}
-       size="3"
-     >
-       <Table.Header>
-         <Table.Row>
-           <Table.ColumnHeaderCell>Name</Table.ColumnHeaderCell>
-           <Table.ColumnHeaderCell>Size</Table.ColumnHeaderCell>
-           <Table.ColumnHeaderCell>Created</Table.ColumnHeaderCell>
-         </Table.Row>
-       </Table.Header>
-       <Table.Body>
-         {sortedPuzzles?.map((puzzle) => {
-           const puzzleUrl = `/play/puzzles/${puzzle.id}`
-           const isMatchingGame = games.some(game => game.metadata === puzzle.id);
-           const puzzleName = isMatchingGame ? <i>{`${puzzle.name} (puzzle completed)`}isMatchingGame</i> : <p>{puzzle.name}</p>;
+    <Table.Root className={`w-full ${puzzles.length > 0 && 'h-full'}`} size="3">
+      <Table.Header>
+        <Table.Row>
+          <Table.ColumnHeaderCell>Name</Table.ColumnHeaderCell>
+          <Table.ColumnHeaderCell>Size</Table.ColumnHeaderCell>
+          <Table.ColumnHeaderCell>Created</Table.ColumnHeaderCell>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
+        {sortedPuzzles?.map((puzzle) => {
+          const puzzleUrl = `/play/puzzles/${puzzle.id}`;
+          const isMatchingGame = games.some(game => game.metadata === puzzle.id);
+          const puzzleName = isMatchingGame ? <i><s>{`${puzzle.name}`}</s> (finished)</i> : puzzle.name;
 
+          return (
+            <Table.Row
+              role="link"
+              onMouseOver={() => {
+                router.prefetch(puzzleUrl);
+              }}
+              onClick={() => {
+                router.push(puzzleUrl);
+              }}
+              className="cursor-pointer hover:bg-gray-100"
+              key={puzzle.id}
+            >
+              <Table.RowHeaderCell>
+                <span className="truncate">{puzzleName}</span>
+              </Table.RowHeaderCell>
+              <Table.Cell className="flex items-baseline">
+                {puzzle.rows} <Cross1Icon height={10} /> {puzzle.cols}
+              </Table.Cell>
+              <Table.Cell>
+                {new Date(puzzle.created_at).toLocaleDateString()}
+              </Table.Cell>
+            </Table.Row>
+          );
+        })}
+      </Table.Body>
+    </Table.Root>
 
-           return (
-             <Table.Row
-               role="link"
-               onMouseOver={() => {
-                 router.prefetch(puzzleUrl);
-               }}
-               onClick={() => {
-                 router.push(puzzleUrl);
-               }}
-               className="cursor-pointer hover:bg-gray-100"
-               key={puzzle.id}
-             >
-               <Table.RowHeaderCell>
-                 <span className="truncate">{puzzleName}</span>
-               </Table.RowHeaderCell>
-               <Table.Cell className="flex items-baseline">
-                 {puzzle.rows} <Cross1Icon height={10} /> {puzzle.cols}
-               </Table.Cell>
-               <Table.Cell>
-                 {new Date(puzzle.created_at).toLocaleDateString()}
-               </Table.Cell>
-             </Table.Row>
-           );
-         })}
-       </Table.Body>
-     </Table.Root>
+    {puzzles.length === 0 && (
+      <div className="flex flex-col items-center justify-center flex-1 w-full gap-2 p-4 py-8">
+        <CookieIcon width={42} height={42} />
+        <Text className="text-gray-900">No puzzles yet!</Text>
+      </div>
+    )}
+  </div>
+);
 
-
-     {puzzles.length === 0 && (
-       <div className="flex flex-col items-center justify-center flex-1 w-full gap-2 p-4 py-8">
-         <CookieIcon width={42} height={42} />
-         <Text className="text-gray-900">No puzzles yet!</Text>
-       </div>
-     )}
-   </div>
- )
 }
 
 

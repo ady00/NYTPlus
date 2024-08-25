@@ -164,9 +164,9 @@ const Form = () => {
         <hr className="border-t-2 border-dashed border-gray-300 mt-6"/>
 
         </div>
-          <div className="flex justify-center p-2">
+          {/*<div className="flex justify-center p-2">
             <form className="px-10 mx-4" action = {guestRegister}><Button className = "px-4">Play as Guest</Button></form>
-          </div>
+          </div>*/}
             <span className="text-gray-900 text-sm"><i>Guests cannot be on daily leaderboards or view stats.</i></span>
 
 
